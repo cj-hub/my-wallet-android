@@ -8,14 +8,4 @@ data class Category(
     val name: String = "",
     val type: Type = Type.NONE,
     val total: Float = 0.0f
-) {
-    /**
-     * Possible types of Category domain model.
-     */
-    enum class Type(val type: String) {
-        INCOME("Income"),
-        EXPENSE("Expense"),
-        TRANSFER("Transfer"),
-        NONE("None")
-    }
-}
+)
