@@ -3,6 +3,8 @@ apply plugin: 'kotlin'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation libs.rxjava
+    implementation libs.rxandroid
     implementation libs.junit
 }
 
@@ -16,6 +18,8 @@ buildscript {
 }
 
 dependencies {
+    implementation libs.rxjava
+    implementation libs.rxandroid
     testImplementation libs.junit
 }
 
