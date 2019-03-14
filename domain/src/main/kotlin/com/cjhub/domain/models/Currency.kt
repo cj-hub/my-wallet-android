@@ -6,6 +6,6 @@ package com.cjhub.domain.models
 data class Currency(
     val id: Long = 0L,
     val name: String = "",
-    val symbol: Char = ' ',
+    val symbol: String = "",
     val isActive: Boolean = false
 )

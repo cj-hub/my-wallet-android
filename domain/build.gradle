@@ -5,27 +5,42 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation libs.rxjava
     implementation libs.rxandroid
-    implementation libs.junit
+    implementation libs.junit5
+    implementation libs.junit5engine
+    implementation libs.spekjvm
+    implementation libs.spekrunner
+    implementation libs.mockitokotlin
 }
 
 buildscript {
     repositories {
-        mavenCentral()
+        google()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
 }
 
+repositories {
+    google()
+    jcenter()
+}
 dependencies {
     implementation libs.rxjava
     implementation libs.rxandroid
-    testImplementation libs.junit
+    testImplementation libs.junit5
+    testImplementation libs.spekjvm
+    testImplementation libs.mockitokotlin
+    testRuntimeOnly libs.junit5engine
+    testRuntimeOnly libs.spekrunner
 }
 
-repositories {
-    mavenCentral()
-    google()
+test {
+    useJUnitPlatform {
+        includeEngines 'spek2'
+    }
 }
 
 compileKotlin {

@@ -15,4 +15,6 @@ interface AccountRepository {
     fun insertOrUpdate(account: Account): Completable
 
     fun delete(account: Account): Completable
+
+    fun reset(): Completable
 }

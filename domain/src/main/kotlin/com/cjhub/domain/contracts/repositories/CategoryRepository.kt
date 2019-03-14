@@ -13,9 +13,11 @@ interface CategoryRepository {
 
     fun getAll(): Single<List<Category>>
 
-    fun getByType(type: Type): Single<List<Category>>
+    fun getAllByType(type: Type): Single<List<Category>>
 
     fun insertOrUpdate(category: Category): Completable
 
     fun delete(category: Category): Completable
+
+    fun reset(): Completable
 }

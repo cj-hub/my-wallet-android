@@ -9,7 +9,6 @@ import java.util.Date
 data class Transaction(
     val id: Long = 0L,
     val date: Date = Calendar.getInstance().time,
-    val type: Type = Type.NONE,
     val account: Account = Account(),
     val category: Category = Category(),
     val toAccount: Account = Account(),

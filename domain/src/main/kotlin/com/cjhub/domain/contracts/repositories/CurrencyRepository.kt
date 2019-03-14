@@ -12,7 +12,5 @@ interface CurrencyRepository {
 
     fun getAll(): Single<List<Currency>>
 
-    fun findActive(): Single<Currency>
-
     fun update(currency: Currency): Completable
 }

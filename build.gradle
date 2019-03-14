@@ -6,10 +6,18 @@ buildscript {
         rxjava_version = '2.2.7'
         rxandroid_version = '2.1.1'
         junit_version = '4.12'
+        junit5_version = '5.4.0'
+        spek_version = '2.0.1'
+        mockitokotlin_version = '2.1.0'
         libs = [
                 rxjava          : ('io.reactivex.rxjava2:rxjava:' + rxjava_version),
                 rxandroid       : ('io.reactivex.rxjava2:rxandroid:' + rxandroid_version),
-                junit           : ('junit:junit:' + junit_version)
+                junit           : ('junit:junit:' + junit_version),
+                junit5          : ('org.junit.jupiter:junit-jupiter-api:' + junit5_version),
+                junit5engine    : ('org.junit.jupiter:junit-jupiter-engine:' + junit5_version),
+                spekjvm         : ('org.spekframework.spek2:spek-dsl-jvm:' + spek_version),
+                spekrunner      : ('org.spekframework.spek2:spek-runner-junit5:' + spek_version),
+                mockitokotlin   : ('com.nhaarman.mockitokotlin2:mockito-kotlin:' + mockitokotlin_version)
         ]
     }
     repositories {
@@ -19,6 +27,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
 }
 
@@ -28,7 +37,7 @@ allprojects {
         testSrcDir = "src/test/kotlin"
 
         androidCompileSdkVersion = 28
-        androidMinSdkVersion = 23
+        androidMinSdkVersion = 26
         androidTargetSdkVersion = 28
         androidVersionCode = 1
         androidVersionName = '1.0'
