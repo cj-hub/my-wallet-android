@@ -15,4 +15,6 @@ interface TransactionRepository {
     fun insertOrUpdate(transaction: Transaction): Completable
 
     fun delete(transaction: Transaction): Completable
+
+    fun clear(): Completable
 }
