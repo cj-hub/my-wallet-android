@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Account
  */
 class ShowAccountsUseCase(private val accountRepository: AccountRepository) {
 
-    fun show(): Single<List<Account>> = TODO()
+    fun show(): Single<List<Account>> = accountRepository.getAll()
 }
