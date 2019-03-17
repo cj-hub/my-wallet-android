@@ -77,7 +77,7 @@ object TransactionFeature : Spek({
                     )
                 )
             }
-            And("the system should update the specified account's balance") {
+            And("the system should update the specified sourceAccount's balance") {
                 verify(accountRepository).insertOrUpdate(Account(
                     1L, "My Wallet", 1000.0f
                 ))
@@ -108,7 +108,7 @@ object TransactionFeature : Spek({
                     1L, "Food", Type.EXPENSE, 900.0f
                 ))
             }
-            And("the system should update the specified account's balance") {
+            And("the system should update the specified sourceAccount's balance") {
                 verify(accountRepository).insertOrUpdate(Account(
                     1L, "My Wallet", 100.0f
                 ))
@@ -137,7 +137,7 @@ object TransactionFeature : Spek({
             And("the system should not update the specified category's total") {
                 verifyZeroInteractions(categoryRepository)
             }
-            And("the system should not update the specified account's balance") {
+            And("the system should not update the specified sourceAccount's balance") {
                 verifyZeroInteractions(accountRepository)
             }
         }
@@ -166,12 +166,12 @@ object TransactionFeature : Spek({
                     1L, "Transfer", Type.TRANSFER, 1000.0f
                 ))
             }
-            And("the system should update the original account's balance") {
+            And("the system should update the source sourceAccount's balance") {
                 verify(accountRepository).insertOrUpdate(Account(
                     1L, "My Wallet", 0.0f
                 ))
             }
-            And("the system should update the new account's balance") {
+            And("the system should update the destination sourceAccount's balance") {
                 verify(accountRepository).insertOrUpdate(Account(
                     2L, "Bank", 1000.0f
                 ))

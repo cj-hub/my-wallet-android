@@ -21,9 +21,9 @@ class CreateTransactionUseCase(
 
     fun create(transaction: Transaction): Completable = Completable.fromAction {
         val category = transaction.category
-        val originalAccount = transaction.account
+        val sourceAccount = transaction.sourceAccount
 
-        if (category.type != Type.INCOME && transaction.amount > originalAccount.balance) {
+        if (category.type != Type.INCOME && transaction.amount > sourceAccount.balance) {
             return@fromAction
         }
         val amountMultiplier = when (category.type) {
@@ -36,15 +36,17 @@ class CreateTransactionUseCase(
             category.id, category.name, category.type, category.total + transaction.amount
         ))
         accountRepository.insertOrUpdate(Account(
-            originalAccount.id,
-            originalAccount.name,
-            originalAccount.balance + transaction.amount * amountMultiplier
+            sourceAccount.id,
+            sourceAccount.name,
+            sourceAccount.balance + transaction.amount * amountMultiplier
         ))
         if (category.type == Type.TRANSFER) {
-            val newAccount = transaction.toAccount
+            val destinationAccount = transaction.destinationAccount
 
             accountRepository.insertOrUpdate(Account(
-                newAccount.id, newAccount.name, newAccount.balance + transaction.amount
+                destinationAccount.id,
+                destinationAccount.name,
+                destinationAccount.balance + transaction.amount
             ))
         }
     }
