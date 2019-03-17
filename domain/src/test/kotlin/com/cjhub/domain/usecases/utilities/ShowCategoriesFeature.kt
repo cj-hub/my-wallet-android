@@ -27,11 +27,21 @@ object ShowCategoriesFeature : Spek({
 
         Scenario("The user wants to request for the income categories") {
 
-            When("The user requests for the income categories") {
+            When("the user requests for the income categories") {
                 showIncomeCategoriesUseCase.show()
             }
             Then("the system should get the list of income categories") {
                 verify(categoryRepository).getAllByType(Type.INCOME)
+            }
+        }
+
+        Scenario("The user wants to request for the expense categories") {
+
+            When("the user requests for the expense categories") {
+                showExpenseCategoriesUseCase.show()
+            }
+            Then("the system should get the list of expense categories") {
+                verify(categoryRepository).getAllByType(Type.EXPENSE)
             }
         }
     }
