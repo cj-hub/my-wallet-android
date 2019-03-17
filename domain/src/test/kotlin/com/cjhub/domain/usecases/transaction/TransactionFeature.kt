@@ -65,7 +65,7 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new income transaction") {
-                createTransactionUseCase.create(newTransaction)
+                createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new income transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -98,7 +98,7 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new expense transaction") {
-                createTransactionUseCase.create(newTransaction)
+                createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new expense transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -129,7 +129,7 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new expense transaction") {
-                createTransactionUseCase.create(newTransaction)
+                createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should not insert the new expense transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -156,7 +156,7 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new transfer transaction") {
-                createTransactionUseCase.create(newTransaction)
+                createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new transfer transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -192,7 +192,7 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new transfer transaction") {
-                createTransactionUseCase.create(newTransaction)
+                createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should not insert the new transfer transaction") {
                 verifyZeroInteractions(transactionRepository)
