@@ -18,7 +18,7 @@ import com.cjhub.domain.models.Category
 import com.cjhub.domain.models.Transaction
 import com.cjhub.domain.models.Type
 
-import java.util.Calendar
+import java.time.LocalDateTime
 
 /**
  * Spek tests for various transaction use cases.
@@ -62,7 +62,7 @@ object TransactionFeatures : Spek({
             Given("a valid income transaction") {
                 newTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     Account(1L, "My Wallet", 0.0f),
                     Category(1L, "Salary", Type.INCOME, 0.0f),
                     Account.NO_ACCOUNT,
@@ -99,7 +99,7 @@ object TransactionFeatures : Spek({
             Given("a valid expense transaction") {
                 newTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     Account(1L, "My Wallet", 1000.0f),
                     Category(1L, "Food", Type.EXPENSE, 0.0f),
                     Account.NO_ACCOUNT,
@@ -136,7 +136,7 @@ object TransactionFeatures : Spek({
             Given("an invalid expense transaction") {
                 newTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     Account(1L, "My Wallet", 1000.0f),
                     Category(1L, "Food", Type.EXPENSE, 0.0f),
                     Account.NO_ACCOUNT,
@@ -174,7 +174,7 @@ object TransactionFeatures : Spek({
             Given("a valid transfer transaction") {
                 newTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     Account(1L, "My Wallet", 1000.0f),
                     Category(1L, "Transfer", Type.TRANSFER, 0.0f),
                     Account(2L, "Bank", 0.0f),
@@ -217,7 +217,7 @@ object TransactionFeatures : Spek({
             Given("an invalid transfer transaction") {
                 newTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     Account(1L, "My Wallet", 1000.0f),
                     Category(1L, "Transfer", Type.TRANSFER, 0.0f),
                     Account(2L, "Bank", 0.0f),
@@ -273,7 +273,7 @@ object TransactionFeatures : Spek({
             Given("a valid transaction update") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldCategory,
                     Account.NO_ACCOUNT,
@@ -322,7 +322,7 @@ object TransactionFeatures : Spek({
             Given("an invalid transaction update") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldCategory,
                     Account.NO_ACCOUNT,
@@ -373,7 +373,7 @@ object TransactionFeatures : Spek({
             Given("a change in category for the transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldFirstCategory,
                     Account.NO_ACCOUNT,
@@ -429,7 +429,7 @@ object TransactionFeatures : Spek({
             Given("a change in category for the transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldFirstCategory,
                     Account.NO_ACCOUNT,
@@ -482,7 +482,7 @@ object TransactionFeatures : Spek({
             Given("a change in account for the transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldFirstSourceAccount,
                     oldCategory,
                     Account.NO_ACCOUNT,
@@ -538,7 +538,7 @@ object TransactionFeatures : Spek({
             Given("a change in account for the transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldFirstSourceAccount,
                     oldCategory,
                     Account.NO_ACCOUNT,
@@ -591,7 +591,7 @@ object TransactionFeatures : Spek({
             Given("a transfer transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldCategory,
                     oldDestinationAccount,
@@ -647,7 +647,7 @@ object TransactionFeatures : Spek({
             Given("a transfer transaction") {
                 oldTransaction = Transaction(
                     1L,
-                    Calendar.getInstance().time,
+                    LocalDateTime.now(),
                     oldSourceAccount,
                     oldCategory,
                     oldDestinationAccount,
