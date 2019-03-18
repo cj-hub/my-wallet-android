@@ -18,14 +18,13 @@ class CreateTransactionUseCase(
 ) {
 
     fun create(transaction: Transaction): Completable {
-        if (!transaction.isValidForCreate()) {
-            return Completable.error(IllegalArgumentException(
+        return if (!transaction.isValidForCreate()) {
+            Completable.error(IllegalArgumentException(
                 "New transaction exceeds the current balance"
             ))
         } else {
             val category = transaction.category
             val sourceAccount = transaction.sourceAccount
-            val destinationAccount = transaction.destinationAccount
 
             val completable = transactionRepository.insertOrUpdate(transaction)
                     .andThen(categoryRepository.insertOrUpdate(
@@ -38,7 +37,9 @@ class CreateTransactionUseCase(
                             else -> 0.0f
                         })
                     ))
-            return if (category.type == Type.TRANSFER) {
+            if (category.type == Type.TRANSFER) {
+                val destinationAccount = transaction.destinationAccount
+
                 completable.andThen(accountRepository.insertOrUpdate(destinationAccount.copy(
                     balance = destinationAccount.balance + transaction.amount
                 )))
