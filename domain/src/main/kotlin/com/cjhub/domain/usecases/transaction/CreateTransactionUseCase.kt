@@ -19,35 +19,42 @@ class CreateTransactionUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    fun create(transaction: Transaction): Completable = Completable.fromAction {
-        val category = transaction.category
-        val sourceAccount = transaction.sourceAccount
-
-        if (category.type != Type.INCOME && transaction.amount > sourceAccount.balance) {
-            return@fromAction
-        }
-        val amountMultiplier = when (category.type) {
-            Type.INCOME -> 1
-            Type.EXPENSE, Type.TRANSFER -> -1
-            else -> 0
-        }
-        transactionRepository.insertOrUpdate(transaction)
-        categoryRepository.insertOrUpdate(Category(
-            category.id, category.name, category.type, category.total + transaction.amount
-        ))
-        accountRepository.insertOrUpdate(Account(
-            sourceAccount.id,
-            sourceAccount.name,
-            sourceAccount.balance + transaction.amount * amountMultiplier
-        ))
-        if (category.type == Type.TRANSFER) {
-            val destinationAccount = transaction.destinationAccount
-
-            accountRepository.insertOrUpdate(Account(
-                destinationAccount.id,
-                destinationAccount.name,
-                destinationAccount.balance + transaction.amount
+    fun create(transaction: Transaction): Completable {
+        if (!transaction.isValidForCreate()) {
+            return Completable.error(IllegalArgumentException(
+                "New transaction exceeds the current balance"
             ))
+        } else {
+            val category = transaction.category
+            val sourceAccount = transaction.sourceAccount
+            val destinationAccount = transaction.destinationAccount
+            val amountMultiplier = when (category.type) {
+                Type.INCOME -> 1
+                Type.EXPENSE, Type.TRANSFER -> -1
+                else -> 0
+            }
+
+            val completable = transactionRepository.insertOrUpdate(transaction)
+                .andThen(categoryRepository.insertOrUpdate(Category(
+                    category.id,
+                    category.name,
+                    category.type,
+                    category.total + transaction.amount
+                )))
+                .andThen(accountRepository.insertOrUpdate(Account(
+                    sourceAccount.id,
+                    sourceAccount.name,
+                    sourceAccount.balance + transaction.amount * amountMultiplier
+                )))
+            return if (category.type == Type.TRANSFER) {
+                completable.andThen(accountRepository.insertOrUpdate(Account(
+                    destinationAccount.id,
+                    destinationAccount.name,
+                    destinationAccount.balance + transaction.amount
+                )))
+            } else {
+                completable
+            }
         }
     }
 }

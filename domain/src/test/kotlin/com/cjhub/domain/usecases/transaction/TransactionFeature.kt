@@ -6,6 +6,9 @@ import org.spekframework.spek2.style.gherkin.Feature
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
+
+import io.reactivex.Completable
 
 import com.cjhub.domain.contracts.repositories.AccountRepository
 import com.cjhub.domain.contracts.repositories.CategoryRepository
@@ -53,6 +56,9 @@ object TransactionFeature : Spek({
 
         Scenario("The user wants to create a valid income transaction") {
 
+            val newCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+
             Given("a valid income transaction") {
                 newTransaction = Transaction(
                     1L,
@@ -65,26 +71,30 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new income transaction") {
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+
                 createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new income transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(
-                    Category(
-                        1L, "Salary", Type.INCOME, 1000.0f
-                    )
-                )
+                verify(categoryRepository).insertOrUpdate(newCategory)
             }
-            And("the system should update the specified sourceAccount's balance") {
-                verify(accountRepository).insertOrUpdate(Account(
-                    1L, "My Wallet", 1000.0f
-                ))
+            And("the system should update the specified account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
             }
         }
 
         Scenario("The user wants to create a valid expense transaction") {
+
+            val newCategory = Category(1L, "Food", Type.EXPENSE, 900.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 100.0f)
 
             Given("a valid expense transaction") {
                 newTransaction = Transaction(
@@ -98,24 +108,30 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new expense transaction") {
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+
                 createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new expense transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(Category(
-                    1L, "Food", Type.EXPENSE, 900.0f
-                ))
+                verify(categoryRepository).insertOrUpdate(newCategory)
             }
-            And("the system should update the specified sourceAccount's balance") {
-                verify(accountRepository).insertOrUpdate(Account(
-                    1L, "My Wallet", 100.0f
-                ))
+            And("the system should update the specified source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
             }
         }
 
         Scenario("The user wants to create an invalid expense transaction") {
+
+            val newCategory = Category(1L, "Food", Type.EXPENSE, 1200.0f)
+            val newSourceAccount = Account(1L, "My Wallet", -200.0f)
 
             Given("an invalid expense transaction") {
                 newTransaction = Transaction(
@@ -129,7 +145,14 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new expense transaction") {
-                createTransactionUseCase.create(newTransaction).subscribe()
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+
+                createTransactionUseCase.create(newTransaction).subscribe({}, {})
             }
             Then("the system should not insert the new expense transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -137,12 +160,16 @@ object TransactionFeature : Spek({
             And("the system should not update the specified category's total") {
                 verifyZeroInteractions(categoryRepository)
             }
-            And("the system should not update the specified sourceAccount's balance") {
+            And("the system should not update the specified source account's balance") {
                 verifyZeroInteractions(accountRepository)
             }
         }
 
         Scenario("The user wants to create a valid transfer transaction") {
+
+            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val newDestinationAccount = Account(2L, "Bank", 1000.0f)
 
             Given("a valid transfer transaction") {
                 newTransaction = Transaction(
@@ -156,29 +183,36 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new transfer transaction") {
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                        .thenReturn(Completable.complete())
+
                 createTransactionUseCase.create(newTransaction).subscribe()
             }
             Then("the system should insert the new transfer transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(Category(
-                    1L, "Transfer", Type.TRANSFER, 1000.0f
-                ))
+                verify(categoryRepository).insertOrUpdate(newCategory)
             }
-            And("the system should update the source sourceAccount's balance") {
-                verify(accountRepository).insertOrUpdate(Account(
-                    1L, "My Wallet", 0.0f
-                ))
+            And("the system should update the source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
             }
-            And("the system should update the destination sourceAccount's balance") {
-                verify(accountRepository).insertOrUpdate(Account(
-                    2L, "Bank", 1000.0f
-                ))
+            And("the system should update the destination account's balance") {
+                verify(accountRepository).insertOrUpdate(newDestinationAccount)
             }
         }
 
         Scenario("The user wants to create an invalid transfer transaction") {
+
+            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
+            val newSourceAccount = Account(1L, "My Wallet", -500.0f)
+            val newDestinationAccount = Account(2L, "Bank", 1500.0f)
 
             Given("an invalid transfer transaction") {
                 newTransaction = Transaction(
@@ -192,7 +226,16 @@ object TransactionFeature : Spek({
                 )
             }
             When("the user creates a new transfer transaction") {
-                createTransactionUseCase.create(newTransaction).subscribe()
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                        .thenReturn(Completable.complete())
+
+                createTransactionUseCase.create(newTransaction).subscribe({}, {})
             }
             Then("the system should not insert the new transfer transaction") {
                 verifyZeroInteractions(transactionRepository)

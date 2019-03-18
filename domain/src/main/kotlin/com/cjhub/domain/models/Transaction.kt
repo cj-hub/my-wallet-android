@@ -14,4 +14,8 @@ data class Transaction(
     val destinationAccount: Account = Account.NO_ACCOUNT,
     val amount: Float = 0.0f,
     val description: String = ""
-)
+) {
+    fun isValidForCreate(): Boolean {
+        return category.type == Type.INCOME || amount <= sourceAccount.balance
+    }
+}
