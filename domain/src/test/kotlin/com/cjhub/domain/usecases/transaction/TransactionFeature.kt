@@ -3,6 +3,11 @@ package com.cjhub.domain.usecases.transaction
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
 
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
+
 import io.reactivex.Completable
 
 import com.cjhub.domain.contracts.repositories.AccountRepository
@@ -12,7 +17,6 @@ import com.cjhub.domain.models.Account
 import com.cjhub.domain.models.Category
 import com.cjhub.domain.models.Transaction
 import com.cjhub.domain.models.Type
-import com.nhaarman.mockitokotlin2.*
 
 import java.util.Calendar
 
@@ -465,6 +469,115 @@ object TransactionFeature : Spek({
             }
         }
 
+        Scenario("The user wants to change the account with enough balance") {
+
+            val oldCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val oldFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val oldSecondSourceAccount = Account(2L, "Bank", 0.0f)
+
+            val newCategory = Category(1L, "Salary", Type.INCOME, 500.0f)
+            val newFirstSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val newSecondSourceAccount = Account(2L, "Bank", 500.0f)
+
+            Given("a change in account for the transaction") {
+                oldTransaction = Transaction(
+                    1L,
+                    Calendar.getInstance().time,
+                    oldFirstSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    1000.0f,
+                    "This month's salary"
+                )
+                newTransaction = Transaction(
+                    oldTransaction.id,
+                    oldTransaction.dateTime,
+                    oldSecondSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    500.0f,
+                    "This month's salary"
+                )
+            }
+            When("the user changes the account") {
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newFirstSourceAccount))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
+                        .thenReturn(Completable.complete())
+
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
+            }
+            Then("the system should update the transaction") {
+                verify(transactionRepository).insertOrUpdate(newTransaction)
+            }
+            And("the system should update the specified category's total") {
+                verify(categoryRepository).insertOrUpdate(newCategory)
+            }
+            And("the system should update the specified old source account's balance") {
+                verify(accountRepository).insertOrUpdate(newFirstSourceAccount)
+            }
+            And("the system should update the specified new source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSecondSourceAccount)
+            }
+        }
+
+        Scenario("The user wants to change the account without enough balance") {
+
+            val oldCategory = Category(1L, "Food", Type.EXPENSE, 500.0f)
+            val oldFirstSourceAccount = Account(1L, "My Wallet", 500.0f)
+            val oldSecondSourceAccount = Account(2L, "Bank", 0.0f)
+
+            val newCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
+            val newFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val newSecondSourceAccount = Account(2L, "Bank", -1000.0f)
+
+            Given("a change in account for the transaction") {
+                oldTransaction = Transaction(
+                    1L,
+                    Calendar.getInstance().time,
+                    oldFirstSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    500.0f,
+                    "Today's groceries"
+                )
+                newTransaction = Transaction(
+                    oldTransaction.id,
+                    oldTransaction.dateTime,
+                    oldSecondSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    1000.0f,
+                    "Today's groceries"
+                )
+            }
+            When("the user changes the account") {
+                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newFirstSourceAccount))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
+                        .thenReturn(Completable.complete())
+
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
+            }
+            Then("the system should not update the transaction") {
+                verifyZeroInteractions(transactionRepository)
+            }
+            And("the system should not update the specified category's total") {
+                verifyZeroInteractions(categoryRepository)
+            }
+            And("the system should not update both of the source accounts' balances") {
+                verifyZeroInteractions(accountRepository)
+            }
+        }
+
         Scenario("The user wants to make a transfer with enough balance") {
 
             val oldCategory = Category(1L, "Transfer", Type.TRANSFER, 500.0f)
@@ -564,13 +677,13 @@ object TransactionFeature : Spek({
                 updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
-                verifyNoMoreInteractions(transactionRepository)
+                verifyZeroInteractions(transactionRepository)
             }
             And("the system should not update the specified category's total") {
-                verifyNoMoreInteractions(categoryRepository)
+                verifyZeroInteractions(categoryRepository)
             }
             And("the system should not update both of the accounts' balances") {
-                verifyNoMoreInteractions(accountRepository)
+                verifyZeroInteractions(accountRepository)
             }
         }
     }
