@@ -5,8 +5,6 @@ import io.reactivex.Completable
 import com.cjhub.domain.contracts.repositories.AccountRepository
 import com.cjhub.domain.contracts.repositories.CategoryRepository
 import com.cjhub.domain.contracts.repositories.TransactionRepository
-import com.cjhub.domain.models.Account
-import com.cjhub.domain.models.Category
 import com.cjhub.domain.models.Transaction
 import com.cjhub.domain.models.Type
 
@@ -28,29 +26,21 @@ class CreateTransactionUseCase(
             val category = transaction.category
             val sourceAccount = transaction.sourceAccount
             val destinationAccount = transaction.destinationAccount
-            val amountMultiplier = when (category.type) {
-                Type.INCOME -> 1
-                Type.EXPENSE, Type.TRANSFER -> -1
-                else -> 0
-            }
 
             val completable = transactionRepository.insertOrUpdate(transaction)
-                .andThen(categoryRepository.insertOrUpdate(Category(
-                    category.id,
-                    category.name,
-                    category.type,
-                    category.total + transaction.amount
-                )))
-                .andThen(accountRepository.insertOrUpdate(Account(
-                    sourceAccount.id,
-                    sourceAccount.name,
-                    sourceAccount.balance + transaction.amount * amountMultiplier
-                )))
+                    .andThen(categoryRepository.insertOrUpdate(
+                        category.copy(total = category.total + transaction.amount)
+                    ))
+                    .andThen(accountRepository.insertOrUpdate(
+                        sourceAccount.copy(balance = sourceAccount.balance + when (category.type) {
+                            Type.INCOME -> transaction.amount
+                            Type.EXPENSE, Type.TRANSFER -> - transaction.amount
+                            else -> 0.0f
+                        })
+                    ))
             return if (category.type == Type.TRANSFER) {
-                completable.andThen(accountRepository.insertOrUpdate(Account(
-                    destinationAccount.id,
-                    destinationAccount.name,
-                    destinationAccount.balance + transaction.amount
+                completable.andThen(accountRepository.insertOrUpdate(destinationAccount.copy(
+                    balance = destinationAccount.balance + transaction.amount
                 )))
             } else {
                 completable
