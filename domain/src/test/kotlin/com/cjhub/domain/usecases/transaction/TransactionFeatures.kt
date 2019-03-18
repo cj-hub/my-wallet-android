@@ -23,7 +23,7 @@ import java.util.Calendar
 /**
  * Spek tests for various transaction use cases.
  */
-object TransactionFeature : Spek({
+object TransactionFeatures : Spek({
 
     Feature("Show Transactions") {
 
