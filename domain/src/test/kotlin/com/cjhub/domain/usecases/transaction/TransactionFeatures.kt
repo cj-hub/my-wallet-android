@@ -298,7 +298,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -347,7 +347,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -400,7 +400,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -456,7 +456,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -509,7 +509,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -565,7 +565,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -618,7 +618,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -674,7 +674,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(newDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction)
+                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
