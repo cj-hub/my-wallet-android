@@ -16,5 +16,5 @@ class UpdateTransactionUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    fun update(newTransaction: Transaction, oldTransaction: Transaction): Completable = TODO()
+    fun update(oldTransaction: Transaction, newTransaction: Transaction): Completable = TODO()
 }
