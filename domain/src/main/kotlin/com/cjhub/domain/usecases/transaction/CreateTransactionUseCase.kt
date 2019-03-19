@@ -26,26 +26,31 @@ class CreateTransactionUseCase(
             val category = transaction.category
             val sourceAccount = transaction.sourceAccount
 
-            val completable = transactionRepository.insertOrUpdate(transaction)
-                    .andThen(categoryRepository.insertOrUpdate(
-                        category.copy(total = category.total + transaction.amount)
-                    ))
-                    .andThen(accountRepository.insertOrUpdate(
-                        sourceAccount.copy(balance = sourceAccount.balance + when (category.type) {
-                            Type.INCOME -> transaction.amount
-                            Type.EXPENSE, Type.TRANSFER -> - transaction.amount
-                            else -> 0.0f
-                        })
-                    ))
-            if (category.type == Type.TRANSFER) {
-                val destinationAccount = transaction.destinationAccount
+            transactionRepository.insertOrUpdate(transaction)
+                    .andThen(categoryRepository.insertOrUpdate(category.copy(
+                        total = category.total + transaction.amount
+                    )))
+                    .andThen(accountRepository.insertOrUpdate(sourceAccount.copy(
+                        balance = sourceAccount.balance + computeAmount(transaction)
+                    )))
+                    .andThen(if (category.type == Type.TRANSFER) {
+                        val destinationAccount = transaction.destinationAccount
 
-                completable.andThen(accountRepository.insertOrUpdate(destinationAccount.copy(
-                    balance = destinationAccount.balance + transaction.amount
-                )))
-            } else {
-                completable
-            }
+                        accountRepository.insertOrUpdate(destinationAccount.copy(
+                            balance = destinationAccount.balance + transaction.amount
+                        ))
+                    } else {
+                        Completable.complete()
+                    })
+
+        }
+    }
+
+    private fun computeAmount(transaction: Transaction): Float {
+        return when (transaction.category.type) {
+            Type.INCOME -> transaction.amount
+            Type.EXPENSE, Type.TRANSFER -> -transaction.amount
+            else -> 0.0f
         }
     }
 }
