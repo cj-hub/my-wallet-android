@@ -56,15 +56,18 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to create a valid income transaction") {
 
-            val newCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val category = Category(1L, "Salary", Type.INCOME, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 0.0f)
+
+            val updatedCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 1000.0f)
 
             Given("a valid income transaction") {
                 newTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    Account(1L, "My Wallet", 0.0f),
-                    Category(1L, "Salary", Type.INCOME, 0.0f),
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "This month's salary"
@@ -73,9 +76,9 @@ object TransactionFeatures : Spek({
             When("the user creates a new income transaction") {
                 whenever(transactionRepository.insertOrUpdate(newTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 createTransactionUseCase.create(newTransaction).subscribe()
@@ -84,24 +87,27 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to create a valid expense transaction") {
 
-            val newCategory = Category(1L, "Food", Type.EXPENSE, 900.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 100.0f)
+            val category = Category(1L, "Food", Type.EXPENSE, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
+
+            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 900.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 100.0f)
 
             Given("a valid expense transaction") {
                 newTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    Account(1L, "My Wallet", 1000.0f),
-                    Category(1L, "Food", Type.EXPENSE, 0.0f),
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     900.0f,
                     "Today's groceries"
@@ -110,9 +116,9 @@ object TransactionFeatures : Spek({
             When("the user creates a new expense transaction") {
                 whenever(transactionRepository.insertOrUpdate(newTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 createTransactionUseCase.create(newTransaction).subscribe()
@@ -121,24 +127,27 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to create an invalid expense transaction") {
 
-            val newCategory = Category(1L, "Food", Type.EXPENSE, 1200.0f)
-            val newSourceAccount = Account(1L, "My Wallet", -200.0f)
+            val category = Category(1L, "Food", Type.EXPENSE, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
+
+            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 1200.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", -200.0f)
 
             Given("an invalid expense transaction") {
                 newTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    Account(1L, "My Wallet", 1000.0f),
-                    Category(1L, "Food", Type.EXPENSE, 0.0f),
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     1200.0f,
                     "Today's groceries"
@@ -147,9 +156,9 @@ object TransactionFeatures : Spek({
             When("the user creates a new expense transaction") {
                 whenever(transactionRepository.insertOrUpdate(newTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 createTransactionUseCase.create(newTransaction).subscribe({}, {})
@@ -167,17 +176,21 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to create a valid transfer transaction") {
 
-            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 0.0f)
-            val newDestinationAccount = Account(2L, "Bank", 1000.0f)
+            val category = Category(1L, "Transfer", Type.TRANSFER, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val destinationAccount = Account(2L, "Bank", 0.0f)
+
+            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val updatedDestinationAccount = Account(2L, "Bank", 1000.0f)
 
             Given("a valid transfer transaction") {
                 newTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    Account(1L, "My Wallet", 1000.0f),
-                    Category(1L, "Transfer", Type.TRANSFER, 0.0f),
-                    Account(2L, "Bank", 0.0f),
+                    sourceAccount,
+                    category,
+                    destinationAccount,
                     1000.0f,
                     "This month's savings"
                 )
@@ -185,11 +198,11 @@ object TransactionFeatures : Spek({
             When("the user creates a new transfer transaction") {
                 whenever(transactionRepository.insertOrUpdate(newTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
                 createTransactionUseCase.create(newTransaction).subscribe()
@@ -198,29 +211,33 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).insertOrUpdate(newTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
             And("the system should update the destination account's balance") {
-                verify(accountRepository).insertOrUpdate(newDestinationAccount)
+                verify(accountRepository).insertOrUpdate(updatedDestinationAccount)
             }
         }
 
         Scenario("The user wants to create an invalid transfer transaction") {
 
-            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
-            val newSourceAccount = Account(1L, "My Wallet", -500.0f)
-            val newDestinationAccount = Account(2L, "Bank", 1500.0f)
+            val category = Category(1L, "Transfer", Type.TRANSFER, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val destinationAccount = Account(2L, "Bank", 0.0f)
+
+            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
+            val updatedDestinationAccount = Account(2L, "Bank", 1500.0f)
 
             Given("an invalid transfer transaction") {
                 newTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    Account(1L, "My Wallet", 1000.0f),
-                    Category(1L, "Transfer", Type.TRANSFER, 0.0f),
-                    Account(2L, "Bank", 0.0f),
+                    sourceAccount,
+                    category,
+                   destinationAccount,
                     1500.0f,
                     "This month's savings"
                 )
@@ -228,11 +245,11 @@ object TransactionFeatures : Spek({
             When("the user creates a new transfer transaction") {
                 whenever(transactionRepository.insertOrUpdate(newTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
                 createTransactionUseCase.create(newTransaction).subscribe({}, {})
@@ -261,96 +278,83 @@ object TransactionFeatures : Spek({
 
         lateinit var oldTransaction: Transaction
         lateinit var newTransaction: Transaction
+        lateinit var updatedTransaction: Transaction
 
         Scenario("The user wants to update a valid transaction") {
 
-            val oldCategory = Category(1L, "Salary", Type.INCOME, 500.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 500.0f)
+            val category = Category(1L, "Salary", Type.INCOME, 500.0f)
+            val sourceAccount = Account(1L, "My Wallet", 500.0f)
 
-            val newCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val updatedCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 1000.0f)
 
             Given("a valid transaction update") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     500.0f,
                     "This month's salary"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldCategory,
-                    Account.NO_ACCOUNT,
-                    1000.0f,
-                    "This month's salary"
+                newTransaction = oldTransaction.copy(amount = 1000.0f)
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedCategory
                 )
             }
             When("the user updates the transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSourceAccount
-                ))
+                verify(transactionRepository).insertOrUpdate(updatedTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to update an invalid transaction") {
 
-            val oldCategory = Category(1L, "Food", Type.EXPENSE, 500.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val category = Category(1L, "Food", Type.EXPENSE, 500.0f)
+            val sourceAccount = Account(1L, "My Wallet", 0.0f)
 
-            val newCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
-            val newSourceAccount = Account(1L, "My Wallet", -500.0f)
+            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
 
             Given("an invalid transaction update") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     500.0f,
                     "Today's groceries"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldCategory,
-                    Account.NO_ACCOUNT,
-                    1000.0f,
-                    "Today's groceries"
+                newTransaction = oldTransaction.copy(amount = 1000.0f)
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedCategory
                 )
             }
             When("the user updates the transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
@@ -368,104 +372,98 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to change the category with enough balance") {
 
-            val oldFirstCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val oldSecondCategory = Category(2L, "Bonus", Type.INCOME, 0.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val firstCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val secondCategory = Category(2L, "Bonus", Type.INCOME, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
 
-            val newFirstCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
-            val newSecondCategory = Category(2L, "Bonus", Type.INCOME, 500.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 500.0f)
+            val updatedFirstCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
+            val updatedSecondCategory = Category(2L, "Bonus", Type.INCOME, 500.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 500.0f)
 
             Given("a change in category for the transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldFirstCategory,
+                    sourceAccount,
+                    firstCategory,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "This month's salary"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldSecondCategory,
-                    Account.NO_ACCOUNT,
-                    500.0f,
-                    "This month's bonus"
+                newTransaction = oldTransaction.copy(
+                    category = secondCategory,
+                    amount = 500.0f,
+                    description = "This month's bonus"
+                )
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedSecondCategory
                 )
             }
             When("the user changes the category") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newSecondCategory, sourceAccount = newSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newFirstCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedFirstCategory))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newSecondCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedSecondCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
-                    category = newSecondCategory, sourceAccount = newSourceAccount
-                ))
+                verify(transactionRepository).insertOrUpdate(updatedTransaction)
             }
             And("the system should update the specified old category's total") {
-                verify(categoryRepository).insertOrUpdate(newFirstCategory)
+                verify(categoryRepository).insertOrUpdate(updatedFirstCategory)
             }
             And("the system should update the specified new category's total") {
-                verify(categoryRepository).insertOrUpdate(newSecondCategory)
+                verify(categoryRepository).insertOrUpdate(updatedSecondCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to change the category without enough balance") {
 
-            val oldFirstCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val oldSecondCategory = Category(2L, "Food", Type.EXPENSE, 0.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val firstCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val secondCategory = Category(2L, "Food", Type.EXPENSE, 0.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
 
-            val newFirstCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
-            val newSecondCategory = Category(2L, "Food", Type.EXPENSE, 500.0f)
-            val newSourceAccount = Account(1L, "My Wallet", -500.0f)
+            val updatedFirstCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
+            val updatedSecondCategory = Category(2L, "Food", Type.EXPENSE, 500.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
 
             Given("a change in category for the transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldFirstCategory,
+                    sourceAccount,
+                    firstCategory,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "This month's salary"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldSecondCategory,
-                    Account.NO_ACCOUNT,
-                    500.0f,
-                    "Today's groceries"
+                newTransaction = oldTransaction.copy(
+                    category = secondCategory,
+                    amount = 500.0f,
+                    description = "Today's groceries"
+                )
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedSecondCategory
                 )
             }
             When("the user changes the category") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newSecondCategory, sourceAccount = newSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newFirstCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedFirstCategory))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newSecondCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedSecondCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
@@ -483,104 +481,96 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to change the account with enough balance") {
 
-            val oldCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val oldFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
-            val oldSecondSourceAccount = Account(2L, "Bank", 0.0f)
+            val category = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val firstSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val secondSourceAccount = Account(2L, "Bank", 0.0f)
 
-            val newCategory = Category(1L, "Salary", Type.INCOME, 500.0f)
-            val newFirstSourceAccount = Account(1L, "My Wallet", 0.0f)
-            val newSecondSourceAccount = Account(2L, "Bank", 500.0f)
+            val updatedCategory = Category(1L, "Salary", Type.INCOME, 500.0f)
+            val updatedFirstSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val updatedSecondSourceAccount = Account(2L, "Bank", 500.0f)
 
             Given("a change in account for the transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldFirstSourceAccount,
-                    oldCategory,
+                    firstSourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "This month's salary"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSecondSourceAccount,
-                    oldCategory,
-                    Account.NO_ACCOUNT,
-                    500.0f,
-                    "This month's salary"
+                newTransaction = oldTransaction.copy(
+                    sourceAccount = secondSourceAccount,
+                    amount = 500.0f
+                )
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSecondSourceAccount,
+                    category = updatedCategory
                 )
             }
             When("the user changes the account") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSecondSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newFirstSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedFirstSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSecondSourceAccount
-                ))
+                verify(transactionRepository).insertOrUpdate(updatedTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified old source account's balance") {
-                verify(accountRepository).insertOrUpdate(newFirstSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedFirstSourceAccount)
             }
             And("the system should update the specified new source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSecondSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSecondSourceAccount)
             }
         }
 
         Scenario("The user wants to change the account without enough balance") {
 
-            val oldCategory = Category(1L, "Food", Type.EXPENSE, 500.0f)
-            val oldFirstSourceAccount = Account(1L, "My Wallet", 500.0f)
-            val oldSecondSourceAccount = Account(2L, "Bank", 0.0f)
+            val category = Category(1L, "Food", Type.EXPENSE, 500.0f)
+            val firstSourceAccount = Account(1L, "My Wallet", 500.0f)
+            val secondSourceAccount = Account(2L, "Bank", 0.0f)
 
-            val newCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
-            val newFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
-            val newSecondSourceAccount = Account(2L, "Bank", -1000.0f)
+            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
+            val updatedFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val updatedSecondSourceAccount = Account(2L, "Bank", -1000.0f)
 
             Given("a change in account for the transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldFirstSourceAccount,
-                    oldCategory,
+                    firstSourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     500.0f,
                     "Today's groceries"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSecondSourceAccount,
-                    oldCategory,
-                    Account.NO_ACCOUNT,
-                    1000.0f,
-                    "Today's groceries"
+                newTransaction = oldTransaction.copy(
+                    sourceAccount = secondSourceAccount,
+                    amount = 1000.0f
+                )
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSecondSourceAccount,
+                    category = updatedCategory
                 )
             }
             When("the user changes the account") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory, sourceAccount = newSecondSourceAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newFirstSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedFirstSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSecondSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
@@ -598,110 +588,92 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to make a transfer with enough balance") {
 
-            val oldCategory = Category(1L, "Transfer", Type.TRANSFER, 500.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 500.0f)
-            val oldDestinationAccount = Account(2L, "Bank", 500.0f)
+            val category = Category(1L, "Transfer", Type.TRANSFER, 500.0f)
+            val sourceAccount = Account(1L, "My Wallet", 500.0f)
+            val destinationAccount = Account(2L, "Bank", 500.0f)
 
-            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 0.0f)
-            val newDestinationAccount = Account(2L, "Bank", 1000.0f)
+            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val updatedDestinationAccount = Account(2L, "Bank", 1000.0f)
 
             Given("a transfer transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
-                    oldDestinationAccount,
+                    sourceAccount,
+                    category,
+                    destinationAccount,
                     500.0f,
                     "This month's savings"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldCategory,
-                    oldDestinationAccount,
-                    1000.0f,
-                    "This month's savings"
+                newTransaction = oldTransaction.copy(amount = 1000.0f)
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedCategory,
+                    destinationAccount = updatedDestinationAccount
                 )
             }
             When("the user makes a transfer") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory,
-                    sourceAccount = newSourceAccount,
-                    destinationAccount = newDestinationAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
-                    category = newCategory,
-                    sourceAccount = newSourceAccount,
-                    destinationAccount = newDestinationAccount
-                ))
+                verify(transactionRepository).insertOrUpdate(updatedTransaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
             And("the system should update the destination account's balance") {
-                verify(accountRepository).insertOrUpdate(newDestinationAccount)
+                verify(accountRepository).insertOrUpdate(updatedDestinationAccount)
             }
         }
 
         Scenario("The user wants to make a transfer without enough balance") {
 
-            val oldCategory = Category(1L, "Transfer", Type.TRANSFER, 500.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 500.0f)
-            val oldDestinationAccount = Account(2L, "Bank", 500.0f)
+            val category = Category(1L, "Transfer", Type.TRANSFER, 500.0f)
+            val sourceAccount = Account(1L, "My Wallet", 500.0f)
+            val destinationAccount = Account(2L, "Bank", 500.0f)
 
-            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
-            val newSourceAccount = Account(1L, "My Wallet", -500.0f)
-            val newDestinationAccount = Account(2L, "Bank", 1500.0f)
+            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
+            val updatedDestinationAccount = Account(2L, "Bank", 1500.0f)
 
             Given("a transfer transaction") {
                 oldTransaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
-                    oldDestinationAccount,
+                    sourceAccount,
+                    category,
+                    destinationAccount,
                     500.0f,
                     "This month's savings"
                 )
-                newTransaction = Transaction(
-                    oldTransaction.id,
-                    oldTransaction.dateTime,
-                    oldSourceAccount,
-                    oldCategory,
-                    oldDestinationAccount,
-                    1500.0f,
-                    "This month's savings"
+                newTransaction = oldTransaction.copy(amount = 1500.0f)
+                updatedTransaction = newTransaction.copy(
+                    sourceAccount = updatedSourceAccount,
+                    category = updatedCategory,
+                    destinationAccount = updatedDestinationAccount
                 )
             }
             When("the user makes a transfer") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
-                    category = newCategory,
-                    sourceAccount = newSourceAccount,
-                    destinationAccount = newDestinationAccount
-                )))
+                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
@@ -730,11 +702,11 @@ object TransactionFeatures : Spek({
 
         Scenario("The user wants to delete an income transaction") {
 
-            val oldCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val category = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val sourceAccount = Account(1L, "My Wallet", 1000.0f)
 
-            val newCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val updatedCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 0.0f)
 
             lateinit var transaction: Transaction
 
@@ -742,8 +714,8 @@ object TransactionFeatures : Spek({
                 transaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "This month's salary"
@@ -752,9 +724,9 @@ object TransactionFeatures : Spek({
             When("the user deletes the transaction") {
                 whenever(transactionRepository.delete(transaction))
                         .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
                         .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
                 deleteTransactionUseCase.delete(transaction)
@@ -763,20 +735,20 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).delete(transaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to delete an expense transaction") {
 
-            val oldCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val category = Category(1L, "Food", Type.EXPENSE, 1000.0f)
+            val sourceAccount = Account(1L, "My Wallet", 0.0f)
 
-            val newCategory = Category(1L, "Food", Type.EXPENSE, 0.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 0.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 1000.0f)
 
             lateinit var transaction: Transaction
 
@@ -784,8 +756,8 @@ object TransactionFeatures : Spek({
                 transaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
+                    sourceAccount,
+                    category,
                     Account.NO_ACCOUNT,
                     1000.0f,
                     "Today's groceries"
@@ -793,11 +765,11 @@ object TransactionFeatures : Spek({
             }
             When("the user deletes the transaction") {
                 whenever(transactionRepository.delete(transaction))
-                    .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
-                    .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
-                    .thenReturn(Completable.complete())
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
+                        .thenReturn(Completable.complete())
 
                 deleteTransactionUseCase.delete(transaction)
             }
@@ -805,22 +777,22 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).delete(transaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 
         Scenario("The user wants to delete transfer transaction") {
 
-            val oldCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
-            val oldSourceAccount = Account(1L, "My Wallet", 0.0f)
-            val oldDestinationAccount = Account(2L, "Bank", 1000.0f)
+            val category = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
+            val sourceAccount = Account(1L, "My Wallet", 0.0f)
+            val destinationAccount = Account(2L, "Bank", 1000.0f)
 
-            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 0.0f)
-            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
-            val newDestinationAccount = Account(2L, "Bank", 0.0f)
+            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 0.0f)
+            val updatedSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val updatedDestinationAccount = Account(2L, "Bank", 0.0f)
 
             lateinit var transaction: Transaction
 
@@ -828,22 +800,22 @@ object TransactionFeatures : Spek({
                 transaction = Transaction(
                     1L,
                     LocalDateTime.now(),
-                    oldSourceAccount,
-                    oldCategory,
-                    oldDestinationAccount,
+                    sourceAccount,
+                    category,
+                    destinationAccount,
                     1000.0f,
                     "This month's savings"
                 )
             }
             When("the user deletes the transaction") {
                 whenever(transactionRepository.delete(transaction))
-                    .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(newCategory))
-                    .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newSourceAccount))
-                    .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
-                    .thenReturn(Completable.complete())
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(updatedCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
+                        .thenReturn(Completable.complete())
 
                 deleteTransactionUseCase.delete(transaction)
             }
@@ -851,13 +823,13 @@ object TransactionFeatures : Spek({
                 verify(transactionRepository).delete(transaction)
             }
             And("the system should update the specified category's total") {
-                verify(categoryRepository).insertOrUpdate(newCategory)
+                verify(categoryRepository).insertOrUpdate(updatedCategory)
             }
             And("the system should update the specified source account's balance") {
-                verify(accountRepository).insertOrUpdate(newSourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
             And("the system should update the specified destination account's balance") {
-                verify(accountRepository).insertOrUpdate(newDestinationAccount)
+                verify(accountRepository).insertOrUpdate(updatedDestinationAccount)
             }
         }
     }
