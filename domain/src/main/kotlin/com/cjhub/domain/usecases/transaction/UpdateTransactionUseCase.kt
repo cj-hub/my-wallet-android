@@ -71,8 +71,7 @@ class UpdateTransactionUseCase(
 
     private fun updateOldSourceAccount(transaction: Transaction): Account {
         return transaction.sourceAccount.copy(
-            balance = transaction.sourceAccount.balance
-                    - computeAmount(transaction)
+            balance = transaction.sourceAccount.balance - computeAmount(transaction)
         )
     }
 

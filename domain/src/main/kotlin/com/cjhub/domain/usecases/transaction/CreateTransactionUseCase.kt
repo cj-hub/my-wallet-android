@@ -33,14 +33,15 @@ class CreateTransactionUseCase(
                     .andThen(accountRepository.insertOrUpdate(sourceAccount.copy(
                         balance = sourceAccount.balance + computeAmount(transaction)
                     )))
-                    .andThen(if (category.type == Type.TRANSFER) {
-                        val destinationAccount = transaction.destinationAccount
+                    .andThen(when (category.type) {
+                        Type.TRANSFER -> {
+                            val destinationAccount = transaction.destinationAccount
 
-                        accountRepository.insertOrUpdate(destinationAccount.copy(
-                            balance = destinationAccount.balance + transaction.amount
-                        ))
-                    } else {
-                        Completable.complete()
+                            accountRepository.insertOrUpdate(destinationAccount.copy(
+                                balance = destinationAccount.balance + transaction.amount
+                            ))
+                        }
+                        else -> Completable.complete()
                     })
 
         }
