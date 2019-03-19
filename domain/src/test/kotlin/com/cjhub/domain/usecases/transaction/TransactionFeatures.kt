@@ -717,4 +717,148 @@ object TransactionFeatures : Spek({
             }
         }
     }
+
+    Feature("Delete Transaction") {
+
+        val transactionRepository by memoized { mock<TransactionRepository>() }
+        val categoryRepository by memoized { mock<CategoryRepository>() }
+        val accountRepository by memoized { mock<AccountRepository>() }
+
+        val deleteTransactionUseCase by memoized {
+            DeleteTransactionUseCase(transactionRepository, categoryRepository, accountRepository)
+        }
+
+        Scenario("The user wants to delete an income transaction") {
+
+            val oldCategory = Category(1L, "Salary", Type.INCOME, 1000.0f)
+            val oldSourceAccount = Account(1L, "My Wallet", 1000.0f)
+
+            val newCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 0.0f)
+
+            lateinit var transaction: Transaction
+
+            Given("an income transaction") {
+                transaction = Transaction(
+                    1L,
+                    LocalDateTime.now(),
+                    oldSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    1000.0f,
+                    "This month's salary"
+                )
+            }
+            When("the user deletes the transaction") {
+                whenever(transactionRepository.delete(transaction))
+                        .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                        .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                        .thenReturn(Completable.complete())
+
+                deleteTransactionUseCase.delete(transaction)
+            }
+            Then("the system should delete the transaction") {
+                verify(transactionRepository).delete(transaction)
+            }
+            And("the system should update the specified category's total") {
+                verify(categoryRepository).insertOrUpdate(newCategory)
+            }
+            And("the system should update the specified source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
+            }
+        }
+
+        Scenario("The user wants to delete an expense transaction") {
+
+            val oldCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
+            val oldSourceAccount = Account(1L, "My Wallet", 0.0f)
+
+            val newCategory = Category(1L, "Food", Type.EXPENSE, 0.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+
+            lateinit var transaction: Transaction
+
+            Given("an expense transaction") {
+                transaction = Transaction(
+                    1L,
+                    LocalDateTime.now(),
+                    oldSourceAccount,
+                    oldCategory,
+                    Account.NO_ACCOUNT,
+                    1000.0f,
+                    "Today's groceries"
+                )
+            }
+            When("the user deletes the transaction") {
+                whenever(transactionRepository.delete(transaction))
+                    .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                    .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                    .thenReturn(Completable.complete())
+
+                deleteTransactionUseCase.delete(transaction)
+            }
+            Then("the system should delete the transaction") {
+                verify(transactionRepository).delete(transaction)
+            }
+            And("the system should update the specified category's total") {
+                verify(categoryRepository).insertOrUpdate(newCategory)
+            }
+            And("the system should update the specified source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
+            }
+        }
+
+        Scenario("The user wants to delete transfer transaction") {
+
+            val oldCategory = Category(1L, "Transfer", Type.TRANSFER, 1000.0f)
+            val oldSourceAccount = Account(1L, "My Wallet", 0.0f)
+            val oldDestinationAccount = Account(2L, "Bank", 1000.0f)
+
+            val newCategory = Category(1L, "Transfer", Type.TRANSFER, 0.0f)
+            val newSourceAccount = Account(1L, "My Wallet", 1000.0f)
+            val newDestinationAccount = Account(2L, "Bank", 0.0f)
+
+            lateinit var transaction: Transaction
+
+            Given("an expense transaction") {
+                transaction = Transaction(
+                    1L,
+                    LocalDateTime.now(),
+                    oldSourceAccount,
+                    oldCategory,
+                    oldDestinationAccount,
+                    1000.0f,
+                    "This month's savings"
+                )
+            }
+            When("the user deletes the transaction") {
+                whenever(transactionRepository.delete(transaction))
+                    .thenReturn(Completable.complete())
+                whenever(categoryRepository.insertOrUpdate(newCategory))
+                    .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newSourceAccount))
+                    .thenReturn(Completable.complete())
+                whenever(accountRepository.insertOrUpdate(newDestinationAccount))
+                    .thenReturn(Completable.complete())
+
+                deleteTransactionUseCase.delete(transaction)
+            }
+            Then("the system should delete the transaction") {
+                verify(transactionRepository).delete(transaction)
+            }
+            And("the system should update the specified category's total") {
+                verify(categoryRepository).insertOrUpdate(newCategory)
+            }
+            And("the system should update the specified source account's balance") {
+                verify(accountRepository).insertOrUpdate(newSourceAccount)
+            }
+            And("the system should update the specified destination account's balance") {
+                verify(accountRepository).insertOrUpdate(newDestinationAccount)
+            }
+        }
+    }
 })
