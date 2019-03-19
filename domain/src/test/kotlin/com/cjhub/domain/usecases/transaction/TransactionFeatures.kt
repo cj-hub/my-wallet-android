@@ -291,7 +291,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user updates the transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())
@@ -301,7 +303,9 @@ object TransactionFeatures : Spek({
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction)
+                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSourceAccount
+                ))
             }
             And("the system should update the specified category's total") {
                 verify(categoryRepository).insertOrUpdate(newCategory)
@@ -340,7 +344,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user updates the transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())
@@ -391,7 +397,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the category") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newSecondCategory, sourceAccount = newSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newFirstCategory))
                         .thenReturn(Completable.complete())
@@ -403,7 +411,9 @@ object TransactionFeatures : Spek({
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction)
+                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
+                    category = newSecondCategory, sourceAccount = newSourceAccount
+                ))
             }
             And("the system should update the specified old category's total") {
                 verify(categoryRepository).insertOrUpdate(newFirstCategory)
@@ -447,7 +457,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the category") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newSecondCategory, sourceAccount = newSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newFirstCategory))
                         .thenReturn(Completable.complete())
@@ -500,7 +512,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the account") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSecondSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())
@@ -512,7 +526,9 @@ object TransactionFeatures : Spek({
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction)
+                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSecondSourceAccount
+                ))
             }
             And("the system should update the specified category's total") {
                 verify(categoryRepository).insertOrUpdate(newCategory)
@@ -556,7 +572,9 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the account") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory, sourceAccount = newSecondSourceAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())
@@ -601,15 +619,19 @@ object TransactionFeatures : Spek({
                 newTransaction = Transaction(
                     oldTransaction.id,
                     oldTransaction.dateTime,
-                    newSourceAccount,
-                    newCategory,
-                    newDestinationAccount,
+                    oldSourceAccount,
+                    oldCategory,
+                    oldDestinationAccount,
                     1000.0f,
                     "This month's savings"
                 )
             }
             When("the user makes a transfer") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory,
+                    sourceAccount = newSourceAccount,
+                    destinationAccount = newDestinationAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())
@@ -621,7 +643,11 @@ object TransactionFeatures : Spek({
                 updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
             }
             Then("the system should update the transaction") {
-                verify(transactionRepository).insertOrUpdate(newTransaction)
+                verify(transactionRepository).insertOrUpdate(newTransaction.copy(
+                    category = newCategory,
+                    sourceAccount = newSourceAccount,
+                    destinationAccount = newDestinationAccount
+                ))
             }
             And("the system should update the specified category's total") {
                 verify(categoryRepository).insertOrUpdate(newCategory)
@@ -657,15 +683,19 @@ object TransactionFeatures : Spek({
                 newTransaction = Transaction(
                     oldTransaction.id,
                     oldTransaction.dateTime,
-                    newSourceAccount,
-                    newCategory,
-                    newDestinationAccount,
+                    oldSourceAccount,
+                    oldCategory,
+                    oldDestinationAccount,
                     1500.0f,
                     "This month's savings"
                 )
             }
             When("the user makes a transfer") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
+                whenever(transactionRepository.insertOrUpdate(newTransaction.copy(
+                    category = newCategory,
+                    sourceAccount = newSourceAccount,
+                    destinationAccount = newDestinationAccount
+                )))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                         .thenReturn(Completable.complete())

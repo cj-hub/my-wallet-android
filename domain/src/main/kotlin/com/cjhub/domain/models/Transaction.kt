@@ -14,7 +14,22 @@ data class Transaction(
     val amount: Float = 0.0f,
     val description: String = ""
 ) {
+
     fun isValidForCreate(): Boolean {
         return category.type == Type.INCOME || amount <= sourceAccount.balance
+    }
+
+    fun isValidForUpdate(old: Transaction): Boolean {
+        return if (sourceAccount == old.sourceAccount) {
+            copy(sourceAccount = sourceAccount.copy(
+                balance = sourceAccount.balance - when (old.category.type) {
+                    Type.INCOME -> old.amount
+                    Type.EXPENSE, Type.TRANSFER -> -old.amount
+                    else -> 0.0f
+                }
+            )).isValidForCreate()
+        } else {
+            isValidForCreate()
+        }
     }
 }
