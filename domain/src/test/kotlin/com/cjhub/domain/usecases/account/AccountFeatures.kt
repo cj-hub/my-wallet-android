@@ -58,4 +58,29 @@ object AccountFeatures : Spek({
             }
         }
     }
+
+    Feature("Update Account") {
+
+        val accountRepository by memoized { mock<AccountRepository>() }
+
+        val updateAccountUseCase by memoized { UpdateAccountUseCase(accountRepository) }
+
+        lateinit var newAccount: Account
+
+        Scenario("The user wants to update an account") {
+
+            Given("an updated account") {
+                newAccount = Account(1L, "Mon Portefeuille", 0.0f)
+            }
+            When("the user updates an account") {
+                whenever(accountRepository.insertOrUpdate(newAccount))
+                        .thenReturn(Completable.complete())
+
+                updateAccountUseCase.update(newAccount)
+            }
+            Then("the system should update the account") {
+                verify(accountRepository).insertOrUpdate(newAccount)
+            }
+        }
+    }
 })
