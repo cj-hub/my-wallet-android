@@ -5,8 +5,12 @@ import org.spekframework.spek2.style.gherkin.Feature
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+
+import io.reactivex.Completable
 
 import com.cjhub.domain.contracts.repositories.AccountRepository
+import com.cjhub.domain.models.Account
 
 /**
  * Spek tests for various account use cases.
@@ -26,6 +30,31 @@ object AccountFeatures : Spek({
             }
             Then("the system should get the list of accounts") {
                 verify(accountRepository).getAll()
+            }
+        }
+    }
+
+    Feature("Create Transaction") {
+
+        val accountRepository by memoized { mock<AccountRepository>() }
+
+        val createAccountUseCase by memoized { CreateAccountUseCase(accountRepository) }
+
+        lateinit var newAccount: Account
+
+        Scenario("The user wants to create a new account") {
+
+            Given("a new account") {
+                newAccount = Account(1L, "My Wallet", 0.0f)
+            }
+            When("the user creates a new account") {
+                whenever(accountRepository.insertOrUpdate(newAccount))
+                        .thenReturn(Completable.complete())
+
+                createAccountUseCase.create(newAccount)
+            }
+            Then("the system should insert the new account") {
+                verify(accountRepository).insertOrUpdate(newAccount)
             }
         }
     }
