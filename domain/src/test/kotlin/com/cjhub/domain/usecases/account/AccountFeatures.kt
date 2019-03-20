@@ -34,7 +34,7 @@ object AccountFeatures : Spek({
         }
     }
 
-    Feature("Create Transaction") {
+    Feature("Create Account") {
 
         val accountRepository by memoized { mock<AccountRepository>() }
 
