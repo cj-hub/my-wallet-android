@@ -6,7 +6,7 @@ import com.cjhub.domain.contracts.repositories.AccountRepository
 import com.cjhub.domain.models.Account
 
 /**
- * Update an existing sourceAccount and store it in the database.
+ * Update an existing account and store it in the database.
  */
 class UpdateAccountUseCase(private val accountRepository: AccountRepository) {
 

@@ -8,7 +8,7 @@ import com.cjhub.domain.contracts.repositories.TransactionRepository
 import com.cjhub.domain.models.Account
 
 /**
- * Delete an existing sourceAccount from the database.
+ * Delete an existing account from the database.
  */
 class DeleteAccountUseCase(
     private val accountRepository: AccountRepository,
