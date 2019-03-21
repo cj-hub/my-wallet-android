@@ -22,5 +22,7 @@ interface TransactionRepository {
 
     fun delete(transaction: Transaction): Completable
 
+    fun deleteByAccount(account: Account): Completable
+
     fun clear(): Completable
 }
