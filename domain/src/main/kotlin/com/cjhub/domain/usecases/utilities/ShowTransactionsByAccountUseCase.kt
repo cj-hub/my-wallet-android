@@ -9,7 +9,7 @@ import com.cjhub.domain.models.Transaction
 /**
  * Show all the transactions corresponding to an account.
  */
-class ShowTransactionsByAccountUseCase(transactionRepository: TransactionRepository) {
+class ShowTransactionsByAccountUseCase(private val transactionRepository: TransactionRepository) {
 
-    fun showBy(account: Account): Single<List<Transaction>> = TODO()
+    fun showBy(account: Account): Single<List<Transaction>> = transactionRepository.getAllByAccount(account)
 }
