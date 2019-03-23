@@ -11,4 +11,15 @@ data class Account(
     companion object {
         val NO_ACCOUNT = Account()
     }
+
+    fun isValidForDelete(relatedTransactions: List<Transaction>): Boolean {
+        return relatedTransactions.filter { transaction ->
+                    transaction.category.type == Type.TRANSFER
+                }
+                .groupBy({ it.destinationAccount }, { it.amount })
+                .map { (account, amounts) ->
+                    account.copy(balance = account.balance - amounts.sum())
+                }
+                .all { account -> account.balance >= 0.0f }
+    }
 }

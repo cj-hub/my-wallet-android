@@ -175,7 +175,7 @@ object AccountFeatures : Spek({
                 verify(accountRepository).delete(account)
             }
             And("the system should update all the corresponding categories") {
-                verify(categoryRepository.insertOrUpdate(updatedIncomeCategory))
+                verify(categoryRepository).insertOrUpdate(updatedIncomeCategory)
                 verify(categoryRepository).insertOrUpdate(updatedExpenseCategory)
             }
         }
@@ -316,7 +316,7 @@ object AccountFeatures : Spek({
 
             val updatedTransferCategory = Category(1L, "Transfer", Type.TRANSFER, 2500.0f)
             val updatedFirstSourceAccount = Account(2L, "Bank", 2500.0f)
-            val updatedSecondSourceAccount = Account(3L, "Another Transfer", 500.0f)
+            val updatedSecondSourceAccount = Account(3L, "Another Bank", 500.0f)
 
             Given("a destination account and a list of transfer transactions") {
                 account = Account(1L, "My Wallet", 2500.0f)
