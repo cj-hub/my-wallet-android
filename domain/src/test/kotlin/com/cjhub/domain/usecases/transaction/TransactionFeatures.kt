@@ -139,9 +139,6 @@ object TransactionFeatures : Spek({
             val category = Category(1L, "Food", Type.EXPENSE, 0.0f)
             val sourceAccount = Account(1L, "My Wallet", 1000.0f)
 
-            val updatedCategory = Category(1L, "Food", Type.EXPENSE, 1200.0f)
-            val updatedSourceAccount = Account(1L, "My Wallet", -200.0f)
-
             Given("an invalid expense transaction") {
                 newTransaction = Transaction(
                     1L,
@@ -154,13 +151,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user creates a new expense transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
-                        .thenReturn(Completable.complete())
-
                 createTransactionUseCase.create(newTransaction)
             }
             Then("the system should not insert the new expense transaction") {
@@ -227,10 +217,6 @@ object TransactionFeatures : Spek({
             val sourceAccount = Account(1L, "My Wallet", 1000.0f)
             val destinationAccount = Account(2L, "Bank", 0.0f)
 
-            val updatedCategory = Category(1L, "Transfer", Type.TRANSFER, 1500.0f)
-            val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
-            val updatedDestinationAccount = Account(2L, "Bank", 1500.0f)
-
             Given("an invalid transfer transaction") {
                 newTransaction = Transaction(
                     1L,
@@ -243,15 +229,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user creates a new transfer transaction") {
-                whenever(transactionRepository.insertOrUpdate(newTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
-                        .thenReturn(Completable.complete())
-
                 createTransactionUseCase.create(newTransaction)
             }
             Then("the system should not insert the new transfer transaction") {
@@ -350,13 +327,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user updates the transaction") {
-                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
-                        .thenReturn(Completable.complete())
-
                 updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
@@ -432,7 +402,6 @@ object TransactionFeatures : Spek({
             val secondCategory = Category(2L, "Food", Type.EXPENSE, 0.0f)
             val sourceAccount = Account(1L, "My Wallet", 1000.0f)
 
-            val updatedFirstCategory = Category(1L, "Salary", Type.INCOME, 0.0f)
             val updatedSecondCategory = Category(2L, "Food", Type.EXPENSE, 500.0f)
             val updatedSourceAccount = Account(1L, "My Wallet", -500.0f)
 
@@ -457,15 +426,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the category") {
-                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedFirstCategory))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedSecondCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
-                        .thenReturn(Completable.complete())
-
                 updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
@@ -541,7 +501,6 @@ object TransactionFeatures : Spek({
             val secondSourceAccount = Account(2L, "Bank", 0.0f)
 
             val updatedCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
-            val updatedFirstSourceAccount = Account(1L, "My Wallet", 1000.0f)
             val updatedSecondSourceAccount = Account(2L, "Bank", -1000.0f)
 
             Given("a change in account for the transaction") {
@@ -564,15 +523,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user changes the account") {
-                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedFirstSourceAccount))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSecondSourceAccount))
-                        .thenReturn(Completable.complete())
-
                 updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
@@ -667,15 +617,6 @@ object TransactionFeatures : Spek({
                 )
             }
             When("the user makes a transfer") {
-                whenever(transactionRepository.insertOrUpdate(updatedTransaction))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
-                        .thenReturn(Completable.complete())
-
                 updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {

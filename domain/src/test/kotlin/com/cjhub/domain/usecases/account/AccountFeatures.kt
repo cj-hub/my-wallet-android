@@ -252,10 +252,6 @@ object AccountFeatures : Spek({
             val firstDestinationAccount = Account(2L, "Bank", 2500.0f)
             val secondDestinationAccount = Account(3L, "Another Bank", 0.0f)
 
-            val updatedTransferCategory = Category(1L, "Transfer", Type.TRANSFER, 2500.0f)
-            val updatedFirstDestinationAccount = Account(2L, "Bank", 500.0f)
-            val updatedSecondDestinationAccount = Account(3L, "Another Bank", -500.0f)
-
             Given("a source account and a list of transfer transactions") {
                 account = Account(1L, "My Wallet", 0.0f)
                 relatedTransactions = listOf(
@@ -289,15 +285,6 @@ object AccountFeatures : Spek({
                 )
             }
             When("the users delete a source account") {
-                whenever(accountRepository.delete(account))
-                        .thenReturn(Completable.complete())
-                whenever(categoryRepository.insertOrUpdate(updatedTransferCategory))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedFirstDestinationAccount))
-                        .thenReturn(Completable.complete())
-                whenever(accountRepository.insertOrUpdate(updatedSecondDestinationAccount))
-                        .thenReturn(Completable.complete())
-
                 deleteAccountUseCase.delete(account, relatedTransactions)
             }
             Then("the system should not delete any of the accounts") {
