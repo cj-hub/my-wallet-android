@@ -6,15 +6,12 @@ buildscript {
         rxjava_version = '2.2.7'
         rxandroid_version = '2.1.1'
         junit_version = '4.12'
-        junit5_version = '5.4.0'
         spek_version = '2.0.1'
         mockitokotlin_version = '2.1.0'
         libs = [
                 rxjava          : ('io.reactivex.rxjava2:rxjava:' + rxjava_version),
                 rxandroid       : ('io.reactivex.rxjava2:rxandroid:' + rxandroid_version),
                 junit           : ('junit:junit:' + junit_version),
-                junit5          : ('org.junit.jupiter:junit-jupiter-api:' + junit5_version),
-                junit5engine    : ('org.junit.jupiter:junit-jupiter-engine:' + junit5_version),
                 spekjvm         : ('org.spekframework.spek2:spek-dsl-jvm:' + spek_version),
                 spekrunner      : ('org.spekframework.spek2:spek-runner-junit5:' + spek_version),
                 mockitokotlin   : ('com.nhaarman.mockitokotlin2:mockito-kotlin:' + mockitokotlin_version)
