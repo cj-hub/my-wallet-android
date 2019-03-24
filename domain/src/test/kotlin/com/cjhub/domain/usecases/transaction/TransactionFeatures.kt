@@ -81,7 +81,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                createTransactionUseCase.create(newTransaction).subscribe()
+                createTransactionUseCase.create(newTransaction)
             }
             Then("the system should insert the new income transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -121,7 +121,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                createTransactionUseCase.create(newTransaction).subscribe()
+                createTransactionUseCase.create(newTransaction)
             }
             Then("the system should insert the new expense transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -161,7 +161,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                createTransactionUseCase.create(newTransaction).subscribe({}, {})
+                createTransactionUseCase.create(newTransaction)
             }
             Then("the system should not insert the new expense transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -205,7 +205,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                createTransactionUseCase.create(newTransaction).subscribe()
+                createTransactionUseCase.create(newTransaction)
             }
             Then("the system should insert the new transfer transaction") {
                 verify(transactionRepository).insertOrUpdate(newTransaction)
@@ -252,7 +252,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                createTransactionUseCase.create(newTransaction).subscribe({}, {})
+                createTransactionUseCase.create(newTransaction)
             }
             Then("the system should not insert the new transfer transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -312,7 +312,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(updatedTransaction)
@@ -357,7 +357,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -410,7 +410,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(updatedTransaction)
@@ -466,7 +466,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -518,7 +518,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(updatedTransaction)
@@ -573,7 +573,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedSecondSourceAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
@@ -623,7 +623,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should update the transaction") {
                 verify(transactionRepository).insertOrUpdate(updatedTransaction)
@@ -676,7 +676,7 @@ object TransactionFeatures : Spek({
                 whenever(accountRepository.insertOrUpdate(updatedDestinationAccount))
                         .thenReturn(Completable.complete())
 
-                updateTransactionUseCase.update(oldTransaction, newTransaction).subscribe({}, {})
+                updateTransactionUseCase.update(oldTransaction, newTransaction)
             }
             Then("the system should not update the transaction") {
                 verifyZeroInteractions(transactionRepository)
