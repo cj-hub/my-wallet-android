@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Category
  */
 class CreateCategoryUseCase(private val categoryRepository: CategoryRepository) {
 
-    fun create(category: Category): Completable = TODO()
+    fun create(category: Category): Completable = categoryRepository.insertOrUpdate(category)
 }
