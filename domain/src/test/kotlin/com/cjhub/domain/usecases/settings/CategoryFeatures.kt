@@ -181,7 +181,7 @@ object CategoryFeatures : Spek({
                 verify(categoryRepository).insertOrUpdate(newCategory)
             }
             And("the system should update the specified source account") {
-                verify(accountRepository).insertOrUpdate(sourceAccount)
+                verify(accountRepository).insertOrUpdate(updatedSourceAccount)
             }
         }
 

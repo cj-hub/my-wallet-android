@@ -15,4 +15,20 @@ data class Category(
         val TRANSFER = Category(3L, "Transfer", Type.TRANSFER, 0.0f)
         val NO_CATEGORY = Category()
     }
+
+    fun isValidForUpdate(newCategory: Category, relatedTransactions: List<Transaction>): Boolean {
+        return when (type) {
+            Type.EXPENSE, Type.TRANSFER -> true
+            else -> when (newCategory.type) {
+                Type.EXPENSE -> {
+                    relatedTransactions.groupBy({ it.sourceAccount }, { it.amount })
+                            .map { (account, amounts) ->
+                                account.copy(balance = account.balance - 2 * amounts.sum())
+                            }
+                            .all { account -> account.balance >= 0.0f }
+                }
+                else -> true
+            }
+        }
+    }
 }
