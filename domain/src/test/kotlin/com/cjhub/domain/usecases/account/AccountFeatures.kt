@@ -79,7 +79,7 @@ object AccountFeatures : Spek({
             Given("an updated account") {
                 newAccount = Account(1L, "Mon Portefeuille", 0.0f)
             }
-            When("the user updates an account") {
+            When("the user updates the account") {
                 whenever(accountRepository.insertOrUpdate(newAccount))
                         .thenReturn(Completable.complete())
 
@@ -161,7 +161,7 @@ object AccountFeatures : Spek({
                     )
                 )
             }
-            When("the user deletes an account") {
+            When("the user deletes the account") {
                 whenever(accountRepository.delete(account))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(updatedIncomeCategory))
@@ -222,7 +222,7 @@ object AccountFeatures : Spek({
                     )
                 )
             }
-            When("the users delete a source account") {
+            When("the user deletes the source account") {
                 whenever(accountRepository.delete(account))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(updatedTransferCategory))
@@ -284,7 +284,7 @@ object AccountFeatures : Spek({
                     )
                 )
             }
-            When("the users delete a source account") {
+            When("the user deletes the source account") {
                 deleteAccountUseCase.delete(account, relatedTransactions)
             }
             Then("the system should not delete any of the accounts") {
@@ -337,7 +337,7 @@ object AccountFeatures : Spek({
                     )
                 )
             }
-            When("the user deletes a destination account") {
+            When("the user deletes the destination account") {
                 whenever(accountRepository.delete(account))
                         .thenReturn(Completable.complete())
                 whenever(categoryRepository.insertOrUpdate(updatedTransferCategory))

@@ -5,8 +5,8 @@ import org.spekframework.spek2.style.gherkin.Feature
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
 
 import io.reactivex.Completable
 
@@ -116,7 +116,7 @@ object CategoryFeatures : Spek({
             Given("a new category") {
                 newCategory = Category(1L, "Bonus", Type.INCOME, 1000.0f)
             }
-            When("the user updates a category") {
+            When("the user updates the category") {
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                     .thenReturn(Completable.complete())
 
@@ -170,7 +170,7 @@ object CategoryFeatures : Spek({
             Given("a new category") {
                 newCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
             }
-            When("the user updates a category") {
+            When("the user updates the category") {
                 whenever(categoryRepository.insertOrUpdate(newCategory))
                     .thenReturn(Completable.complete())
                 whenever(accountRepository.insertOrUpdate(updatedSourceAccount))
@@ -224,7 +224,7 @@ object CategoryFeatures : Spek({
             Given("a new category") {
                 newCategory = Category(1L, "Food", Type.EXPENSE, 1000.0f)
             }
-            When("the user updates a category") {
+            When("the user updates the category") {
                 updateCategoryUseCase.update(category, newCategory, transactions)
             }
             Then("the system should not update the category") {
@@ -283,7 +283,7 @@ object CategoryFeatures : Spek({
                     transaction.copy(category = updatedOtherIncome)
                 }
             }
-            When("the user deletes an income category") {
+            When("the user deletes the income category") {
                 whenever(categoryRepository.insertOrUpdate(updatedOtherIncome))
                         .thenReturn(Completable.complete())
                 newTransactions.forEach { newTransaction ->
@@ -343,7 +343,7 @@ object CategoryFeatures : Spek({
                     transaction.copy(category = updatedOtherExpense)
                 }
             }
-            When("the user deletes an expense category") {
+            When("the user deletes the expense category") {
                 whenever(categoryRepository.insertOrUpdate(updatedOtherExpense))
                         .thenReturn(Completable.complete())
                 newTransactions.forEach { newTransaction ->

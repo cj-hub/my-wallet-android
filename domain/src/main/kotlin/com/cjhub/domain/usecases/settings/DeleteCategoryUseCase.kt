@@ -22,18 +22,15 @@ class DeleteCategoryUseCase(
         otherIncome: Category,
         otherExpense: Category
     ): Completable {
-        val updatedCategory = if (category.type == Type.INCOME) {
-            otherIncome.copy(total = otherIncome.total + category.total)
-        } else {
-            otherExpense.copy(total = otherExpense.total + category.total)
+        val updatedCategory = when (category.type) {
+            Type.INCOME -> otherIncome.copy(total = otherIncome.total + category.total)
+            else -> otherExpense.copy(total = otherExpense.total + category.total)
         }
 
         return categoryRepository.insertOrUpdate(updatedCategory)
-                .andThen(Completable.merge(
-                    relatedTransactions.map { transaction ->
-                        transactionRepository.insertOrUpdate(transaction.copy(category = updatedCategory))
-                    }
-                ))
+                .andThen(Completable.merge(relatedTransactions.map { transaction ->
+                    transactionRepository.insertOrUpdate(transaction.copy(category = updatedCategory))
+                }))
                 .andThen(categoryRepository.delete(category))
     }
 }
