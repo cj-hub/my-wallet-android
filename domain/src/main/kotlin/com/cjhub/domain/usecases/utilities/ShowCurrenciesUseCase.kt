@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Currency
  */
 class ShowCurrenciesUseCase(private val currencyRepository: CurrencyRepository) {
 
-    fun show(): Single<List<Currency>> = TODO()
+    fun show(): Single<List<Currency>> = currencyRepository.getAll()
 }

@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Transaction
  */
 class ShowTransactionsUseCase(private val transactionRepository: TransactionRepository) {
 
-    fun show(): Single<List<Transaction>> = TODO()
+    fun show(): Single<List<Transaction>> = transactionRepository.getAll()
 }

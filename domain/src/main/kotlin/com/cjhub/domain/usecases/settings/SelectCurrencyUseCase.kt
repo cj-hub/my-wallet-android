@@ -18,5 +18,17 @@ class SelectCurrencyUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    fun select(newCurrency: Currency, oldCurrency: Currency): Completable = TODO()
+    fun select(oldCurrency: Currency, newCurrency: Currency): Completable {
+        return if (oldCurrency == newCurrency) {
+            Completable.error(IllegalArgumentException(
+                "Currency already selected"
+            ))
+        } else {
+            currencyRepository.update(oldCurrency.copy(isActive = false))
+                    .andThen(currencyRepository.update(newCurrency))
+                    .andThen(transactionRepository.clear())
+                    .andThen(categoryRepository.reset())
+                    .andThen(accountRepository.reset())
+        }
+    }
 }

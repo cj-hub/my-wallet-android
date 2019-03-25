@@ -5,8 +5,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation libs.rxjava
     implementation libs.rxandroid
-    implementation libs.junit5
-    implementation libs.junit5engine
     implementation libs.spekjvm
     implementation libs.spekrunner
     implementation libs.mockitokotlin
@@ -30,10 +28,8 @@ repositories {
 dependencies {
     implementation libs.rxjava
     implementation libs.rxandroid
-    testImplementation libs.junit5
     testImplementation libs.spekjvm
     testImplementation libs.mockitokotlin
-    testRuntimeOnly libs.junit5engine
     testRuntimeOnly libs.spekrunner
 }
 

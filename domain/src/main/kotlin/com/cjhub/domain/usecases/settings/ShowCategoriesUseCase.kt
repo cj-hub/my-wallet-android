@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Category
  */
 class ShowCategoriesUseCase(private val categoryRepository: CategoryRepository) {
 
-    fun show(): Single<List<Category>> = TODO()
+    fun show(): Single<List<Category>> = categoryRepository.getAll()
 }

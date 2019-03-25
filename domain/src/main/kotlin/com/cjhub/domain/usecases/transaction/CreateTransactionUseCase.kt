@@ -6,6 +6,7 @@ import com.cjhub.domain.contracts.repositories.AccountRepository
 import com.cjhub.domain.contracts.repositories.CategoryRepository
 import com.cjhub.domain.contracts.repositories.TransactionRepository
 import com.cjhub.domain.models.Transaction
+import com.cjhub.domain.models.Type
 
 /**
  * Create a new transaction and store it in the database.
@@ -16,5 +17,41 @@ class CreateTransactionUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    fun create(transaction: Transaction): Completable = TODO()
+    fun create(transaction: Transaction): Completable {
+        return if (!transaction.isValidForCreate()) {
+            Completable.error(IllegalArgumentException(
+                "New transaction exceeds the current balance"
+            ))
+        } else {
+            val category = transaction.category
+            val sourceAccount = transaction.sourceAccount
+
+            transactionRepository.insertOrUpdate(transaction)
+                    .andThen(categoryRepository.insertOrUpdate(category.copy(
+                        total = category.total + transaction.amount
+                    )))
+                    .andThen(accountRepository.insertOrUpdate(sourceAccount.copy(
+                        balance = sourceAccount.balance + computeAmount(transaction)
+                    )))
+                    .andThen(when (category.type) {
+                        Type.TRANSFER -> {
+                            val destinationAccount = transaction.destinationAccount
+
+                            accountRepository.insertOrUpdate(destinationAccount.copy(
+                                balance = destinationAccount.balance + transaction.amount
+                            ))
+                        }
+                        else -> Completable.complete()
+                    })
+
+        }
+    }
+
+    private fun computeAmount(transaction: Transaction): Float {
+        return when (transaction.category.type) {
+            Type.INCOME -> transaction.amount
+            Type.EXPENSE, Type.TRANSFER -> -transaction.amount
+            else -> 0.0f
+        }
+    }
 }

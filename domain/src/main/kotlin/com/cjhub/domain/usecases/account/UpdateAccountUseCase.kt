@@ -10,5 +10,5 @@ import com.cjhub.domain.models.Account
  */
 class UpdateAccountUseCase(private val accountRepository: AccountRepository) {
 
-    fun update(account: Account): Completable = TODO()
+    fun update(account: Account): Completable = accountRepository.insertOrUpdate(account)
 }
