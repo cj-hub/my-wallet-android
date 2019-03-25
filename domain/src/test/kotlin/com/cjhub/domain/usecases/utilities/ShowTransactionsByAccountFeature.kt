@@ -10,7 +10,7 @@ import com.cjhub.domain.contracts.repositories.TransactionRepository
 import com.cjhub.domain.models.Account
 
 /**
- * Spek tests for showing transactions corresponding to an account
+ * Spek tests for showing transactions corresponding to an account.
  */
 object ShowTransactionsByAccountFeature : Spek({
 
