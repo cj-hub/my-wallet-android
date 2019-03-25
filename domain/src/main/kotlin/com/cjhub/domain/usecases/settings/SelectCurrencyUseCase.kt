@@ -18,5 +18,5 @@ class SelectCurrencyUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    fun select(newCurrency: Currency, oldCurrency: Currency): Completable = TODO()
+    fun select(oldCurrency: Currency, newCurrency: Currency): Completable = TODO()
 }
