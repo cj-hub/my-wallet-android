@@ -13,5 +13,5 @@ data class DetailedTransactionEntity(
     @Embedded
     val sourceAccount: AccountEntity,
     @Embedded
-    val destinationAccount: AccountEntity
+    val destinationAccount: AccountEntity?
 )
