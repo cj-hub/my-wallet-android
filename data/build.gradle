@@ -1,5 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
+
+ext {
+    androidarch_version = '1.1.1'
+}
 
 android {
     def globalConfiguration = rootProject.extensions.getByName('ext')
@@ -15,6 +21,15 @@ android {
         versionName globalConfiguration['androidVersionName']
         testInstrumentationRunner globalConfiguration['testInstrumentationRunner']
     }
+    testOptions {
+        junitPlatform {
+            filters {
+                engines {
+                    include 'spek2'
+                }
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -24,8 +39,13 @@ android {
 }
 
 dependencies {
-    implementation project(':domain')
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    testImplementation libs.junit
+    implementation project(':domain')
+    implementation "android.arch.persistence.room:runtime:$androidarch_version"
+    implementation "android.arch.persistence.room:rxjava2:$androidarch_version"
+    kapt "android.arch.persistence.room:compiler:$androidarch_version"
+    testImplementation libs.spekjvm
+    testImplementation libs.spekrunner
+    testImplementation libs.mockitokotlin
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
