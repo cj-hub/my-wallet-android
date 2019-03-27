@@ -10,7 +10,11 @@ import com.cjhub.data.entities.CurrencyEntity
  */
 class CurrencyMapperImpl : Mapper<CurrencyEntity, Currency> {
 
-    override fun toModel(from: CurrencyEntity): Currency = TODO()
+    override fun toModel(from: CurrencyEntity): Currency {
+        return Currency(from.id, from.name, from.symbol, from.isActive)
+    }
 
-    override fun toEntity(from: Currency): CurrencyEntity = TODO()
+    override fun toEntity(from: Currency): CurrencyEntity {
+        return CurrencyEntity(from.id, from.name, from.symbol, from.isActive, System.currentTimeMillis())
+    }
 }
