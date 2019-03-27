@@ -1,0 +1,73 @@
+package com.cjhub.data
+
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
+import android.content.Context
+
+import com.cjhub.data.dao.AccountDaoImpl
+import com.cjhub.data.dao.CategoryDaoImpl
+import com.cjhub.data.dao.CurrencyDaoImpl
+import com.cjhub.data.dao.TransactionDaoImpl
+import com.cjhub.data.entities.AccountEntity
+import com.cjhub.data.entities.CategoryEntity
+import com.cjhub.data.entities.CurrencyEntity
+import com.cjhub.data.entities.TransactionEntity
+
+/**
+ * Room implementation of My Wallet database.
+ */
+@Database(
+    entities = [
+        CurrencyEntity::class,
+        TransactionEntity::class,
+        CategoryEntity::class,
+        AccountEntity::class
+    ],
+    version = 1,
+    exportSchema = false
+)
+internal abstract class MyWalletDatabase : RoomDatabase() {
+
+    companion object {
+
+        @Volatile private var INSTANCE: MyWalletDatabase? = null
+
+        private fun getInstance(context: Context): MyWalletDatabase {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also { myWalletDatabase ->
+                    INSTANCE = myWalletDatabase
+                }
+            }
+        }
+
+        private fun buildDatabase(context: Context): MyWalletDatabase {
+            return Room.databaseBuilder(context, MyWalletDatabase::class.java, "my_wallet_db")
+                    .build()
+        }
+
+        fun createCurrencyDao(context: Context): CurrencyDaoImpl {
+            return getInstance(context).currencyDao()
+        }
+
+        fun createTransactionDao(context: Context): TransactionDaoImpl {
+            return getInstance(context).transactionDao()
+        }
+
+        fun createCategoryDao(context: Context): CategoryDaoImpl {
+            return getInstance(context).categoryDao()
+        }
+
+        fun createAccountDao(context: Context): AccountDaoImpl {
+            return getInstance(context).accountDao()
+        }
+    }
+
+    abstract fun currencyDao(): CurrencyDaoImpl
+
+    abstract fun transactionDao(): TransactionDaoImpl
+
+    abstract fun categoryDao(): CategoryDaoImpl
+
+    abstract fun accountDao(): AccountDaoImpl
+}

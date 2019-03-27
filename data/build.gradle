@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'de.mannodermaus.android-junit5'
 
@@ -12,7 +13,6 @@ android {
     sourceSets {
         main.java.srcDir(globalConfiguration['mainSrcDir'])
         test.java.srcDir(globalConfiguration['testSrcDir'])
-        androidTest.java.srcDir(globalConfiguration['androidTestSrcDir'])
     }
     compileSdkVersion globalConfiguration['androidCompileSdkVersion']
     defaultConfig {
@@ -31,6 +31,9 @@ android {
             }
         }
     }
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -42,6 +45,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':domain')
+    implementation "com.android.support:support-annotations:$supportlibrary_version"
     implementation "android.arch.persistence.room:runtime:$androidarch_version"
     implementation "android.arch.persistence.room:rxjava2:$androidarch_version"
     kapt "android.arch.persistence.room:compiler:$androidarch_version"
