@@ -32,8 +32,9 @@ buildscript {
 
 allprojects {
     ext {
-        mainSrcDir = "src/main/kotlin"
-        testSrcDir = "src/test/kotlin"
+        mainSrcDir = 'src/main/kotlin'
+        testSrcDir = 'src/test/kotlin'
+        androidTestSrcDir = 'src/androidTest/kotlin'
 
         androidCompileSdkVersion = 28
         androidMinSdkVersion = 26

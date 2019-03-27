@@ -12,6 +12,7 @@ android {
     sourceSets {
         main.java.srcDir(globalConfiguration['mainSrcDir'])
         test.java.srcDir(globalConfiguration['testSrcDir'])
+        androidTest.java.srcDir(globalConfiguration['androidTestSrcDir'])
     }
     compileSdkVersion globalConfiguration['androidCompileSdkVersion']
     defaultConfig {
