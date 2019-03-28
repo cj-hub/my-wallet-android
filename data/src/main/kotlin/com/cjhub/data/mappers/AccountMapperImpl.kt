@@ -8,9 +8,9 @@ import com.cjhub.data.entities.AccountEntity
 /**
  * Mapper between Account entity and domain model.
  */
-class AccountMapperImpl : Mapper<AccountEntity, Account> {
+class AccountMapperImpl : Mapper<AccountEntity?, Account> {
 
-    override fun toModel(from: AccountEntity): Account = TODO()
+    override fun toModel(from: AccountEntity?): Account = TODO()
 
     override fun toEntity(from: Account): AccountEntity = TODO()
 }
