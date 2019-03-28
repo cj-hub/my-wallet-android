@@ -4,12 +4,12 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 import com.cjhub.domain.contracts.Mapper
-import com.cjhub.domain.contracts.dao.TransactionDao
 import com.cjhub.domain.contracts.repositories.TransactionRepository
 import com.cjhub.domain.models.Account
 import com.cjhub.domain.models.Category
 import com.cjhub.domain.models.Transaction
 
+import com.cjhub.data.dao.TransactionDaoImpl
 import com.cjhub.data.entities.DetailedTransactionEntity
 import com.cjhub.data.entities.TransactionEntity
 
@@ -17,7 +17,7 @@ import com.cjhub.data.entities.TransactionEntity
  * Room implementation of Transaction repository.
  */
 class TransactionRepositoryImpl(
-    private val transactionDao: TransactionDao,
+    private val transactionDao: TransactionDaoImpl,
     private val transactionMapper: Mapper<TransactionEntity, Transaction>,
     private val detailedTransactionMapper: Mapper<DetailedTransactionEntity, Transaction>
 ) : TransactionRepository {

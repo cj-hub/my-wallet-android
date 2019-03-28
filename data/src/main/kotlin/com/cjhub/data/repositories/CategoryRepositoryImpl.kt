@@ -4,18 +4,18 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 import com.cjhub.domain.contracts.Mapper
-import com.cjhub.domain.contracts.dao.CategoryDao
 import com.cjhub.domain.contracts.repositories.CategoryRepository
 import com.cjhub.domain.models.Category
 import com.cjhub.domain.models.Type
 
+import com.cjhub.data.dao.CategoryDaoImpl
 import com.cjhub.data.entities.CategoryEntity
 
 /**
  * Room implementation of Category repository.
  */
 class CategoryRepositoryImpl(
-    private val categoryDao: CategoryDao,
+    private val categoryDao: CategoryDaoImpl,
     private val categoryMapper: Mapper<CategoryEntity, Category>
 ) : CategoryRepository {
 
