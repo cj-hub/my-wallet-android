@@ -10,7 +10,16 @@ import com.cjhub.data.entities.AccountEntity
  */
 class AccountMapperImpl : Mapper<AccountEntity?, Account> {
 
-    override fun toModel(from: AccountEntity?): Account = TODO()
+    override fun toModel(from: AccountEntity?): Account {
+        return from?.let { entity ->
+            Account(entity.id, entity.name, entity.balance)
+        } ?: Account.NO_ACCOUNT
+    }
 
-    override fun toEntity(from: Account): AccountEntity = TODO()
+    override fun toEntity(from: Account): AccountEntity? {
+        return when (from) {
+            Account.NO_ACCOUNT -> null
+            else -> AccountEntity(from.id, from.name, from.balance, System.currentTimeMillis())
+        }
+    }
 }

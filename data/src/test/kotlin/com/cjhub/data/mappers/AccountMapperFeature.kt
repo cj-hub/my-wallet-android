@@ -20,7 +20,7 @@ class AccountMapperFeature : Spek({
 
             lateinit var accountModel: Account
 
-            lateinit var accountEntity: AccountEntity
+            var accountEntity: AccountEntity? = null
 
             Given("an account model") {
                 accountModel = Account(1L, "My Wallet", 1000.0f)
@@ -29,10 +29,10 @@ class AccountMapperFeature : Spek({
                 accountEntity = accountMapper.toEntity(accountModel)
             }
             Then("a valid account entity should be returned") {
-                assert(accountEntity.id == 1L)
-                assert(accountEntity.name == "My Wallet")
-                assert(accountEntity.balance == 1000.0f)
-                assert(accountEntity.timestamp > 0L)
+                assert(accountEntity!!.id == 1L)
+                assert(accountEntity!!.name == "My Wallet")
+                assert(accountEntity!!.balance == 1000.0f)
+                assert(accountEntity!!.timestamp > 0L)
             }
         }
 
@@ -60,7 +60,7 @@ class AccountMapperFeature : Spek({
 
         Scenario("The system wants to map an account entity to a corresponding model") {
 
-            lateinit var accountEntity: AccountEntity
+            var accountEntity: AccountEntity? = null
 
             lateinit var accountModel: Account
 
