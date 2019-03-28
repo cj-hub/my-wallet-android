@@ -32,7 +32,6 @@ class CategoryMapperImpl : Mapper<CategoryEntity, Category> {
             from.type.toString(),
             from.total,
             System.currentTimeMillis()
-
         )
     }
 }

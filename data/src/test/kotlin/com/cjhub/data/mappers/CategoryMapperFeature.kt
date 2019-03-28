@@ -32,7 +32,7 @@ class CategoryMapperFeature : Spek({
             Then("a valid category entity should be returned") {
                 assert(categoryEntity.id == 1L)
                 assert(categoryEntity.name == "Salary")
-                assert(categoryEntity.type == "Income")
+                assert(categoryEntity.type == Type.INCOME.toString())
                 assert(categoryEntity.total == 1000.0f)
                 assert(categoryEntity.timestamp > 0L)
             }
