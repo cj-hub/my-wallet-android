@@ -18,7 +18,11 @@ class CurrencyRepositoryImpl(
     private val currencyMapper: Mapper<CurrencyEntity, Currency>
 ) : CurrencyRepository {
 
-    override fun getAll(): Single<List<Currency>> = TODO()
+    override fun getAll(): Single<List<Currency>> {
+        return currencyDao.getAll().map { currencies -> currencies.map(currencyMapper::toModel) }
+    }
 
-    override fun update(currency: Currency): Completable = TODO()
+    override fun update(currency: Currency): Completable {
+        return Completable.fromAction { currencyDao.update(currencyMapper.toEntity(currency)) }
+    }
 }
