@@ -19,13 +19,25 @@ class CategoryRepositoryImpl(
     private val categoryMapper: Mapper<CategoryEntity, Category>
 ) : CategoryRepository {
 
-    override fun getAll(): Single<List<Category>> = TODO()
+    override fun getAll(): Single<List<Category>> {
+        return categoryDao.getAll().map { categories -> categories.map(categoryMapper::toModel) }
+    }
 
-    override fun getAllByType(type: Type): Single<List<Category>> = TODO()
+    override fun getAllByType(type: Type): Single<List<Category>> {
+        return categoryDao.getAllByType(type.toString()).map { categories ->
+            categories.map(categoryMapper::toModel)
+        }
+    }
 
-    override fun insertOrUpdate(category: Category): Completable = TODO()
+    override fun insertOrUpdate(category: Category): Completable {
+        return Completable.fromAction { categoryDao.insertOrUpdate(categoryMapper.toEntity(category)) }
+    }
 
-    override fun delete(category: Category): Completable = TODO()
+    override fun delete(category: Category): Completable {
+        return Completable.fromAction { categoryDao.delete(categoryMapper.toEntity(category)) }
+    }
 
-    override fun reset(): Completable = TODO()
+    override fun reset(): Completable {
+        return Completable.fromAction { categoryDao.reset() }
+    }
 }
