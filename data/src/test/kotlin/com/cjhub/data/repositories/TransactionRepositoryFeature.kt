@@ -153,7 +153,7 @@ class TransactionRepositoryFeature : Spek({
 
         lateinit var testObserver: TestObserver<List<Transaction>>
 
-        Scenario("The systems wants to get the list of transactions") {
+        Scenario("The system wants to get the list of transactions") {
 
             Given("a list of transactions exists") {
                 transactionEntities = listOf(firstTransactionEntity, secondTransactionEntity, thirdTransactionEntity)
@@ -185,7 +185,7 @@ class TransactionRepositoryFeature : Spek({
             }
         }
 
-        Scenario("The systems wants to get the list of transactions with a specific account") {
+        Scenario("The system wants to get the list of transactions with a specific account") {
 
             Given("a list of transactions with a specific account exists") {
                 transactionEntities = listOf(firstTransactionEntity)
@@ -209,7 +209,7 @@ class TransactionRepositoryFeature : Spek({
             }
         }
 
-        Scenario("The systems wants to get the list of transactions with a specific category") {
+        Scenario("The system wants to get the list of transactions with a specific category") {
 
             Given("a list of transactions with a specific category exists") {
                 transactionEntities = listOf(firstTransactionEntity, secondTransactionEntity)
