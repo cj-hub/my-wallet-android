@@ -22,15 +22,33 @@ class TransactionRepositoryImpl(
     private val detailedTransactionMapper: Mapper<DetailedTransactionEntity, Transaction>
 ) : TransactionRepository {
 
-    override fun getAll(): Single<List<Transaction>> = TODO()
+    override fun getAll(): Single<List<Transaction>> {
+        return transactionDao.getAll().map { transactions ->
+            transactions.map(detailedTransactionMapper::toModel)
+        }
+    }
 
-    override fun getAllByAccount(account: Account): Single<List<Transaction>> = TODO()
+    override fun getAllByAccount(account: Account): Single<List<Transaction>> {
+        return transactionDao.getAllByAccount(account.id).map { transactions ->
+            transactions.map(detailedTransactionMapper::toModel)
+        }
+    }
 
-    override fun getAllByCategory(category: Category): Single<List<Transaction>> = TODO()
+    override fun getAllByCategory(category: Category): Single<List<Transaction>> {
+        return transactionDao.getAllByCategory(category.id).map { transactions ->
+            transactions.map(detailedTransactionMapper::toModel)
+        }
+    }
 
-    override fun insertOrUpdate(transaction: Transaction): Completable = TODO()
+    override fun insertOrUpdate(transaction: Transaction): Completable {
+        return Completable.fromAction { transactionDao.insertOrUpdate(transactionMapper.toEntity(transaction)) }
+    }
 
-    override fun delete(transaction: Transaction): Completable = TODO()
+    override fun delete(transaction: Transaction): Completable {
+        return Completable.fromAction { transactionDao.delete(transactionMapper.toEntity(transaction)) }
+    }
 
-    override fun clear(): Completable = TODO()
+    override fun clear(): Completable {
+        return Completable.fromAction { transactionDao.clear() }
+    }
 }
