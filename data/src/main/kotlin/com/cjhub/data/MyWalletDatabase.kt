@@ -34,15 +34,11 @@ internal abstract class MyWalletDatabase : RoomDatabase() {
 
     companion object {
 
-        @Volatile
         private var INSTANCE: MyWalletDatabase? = null
 
+        @Synchronized
         private fun getInstance(context: Context): MyWalletDatabase {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context).also { myWalletDatabase ->
-                    INSTANCE = myWalletDatabase
-                }
-            }
+            return INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
         }
 
         private fun buildDatabase(context: Context): MyWalletDatabase {
