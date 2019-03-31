@@ -210,7 +210,7 @@ class CategoryRepositoryFeature : Spek({
             When("the system resets all categories") {
                 testObserver = categoryRepository.reset().test()
             }
-            Then("the system should clear successfully") {
+            Then("the system should reset successfully") {
                 testObserver.assertComplete()
             }
         }
