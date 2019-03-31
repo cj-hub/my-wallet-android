@@ -123,7 +123,7 @@ class CurrencyRepositoryFeature : Spek({
             }
             And("the model should be mapped accordingly") {
                 argumentCaptor<CurrencyEntity> {
-                    verify(currencyDao).update(capture())
+                    verify(currencyDao).insertOrUpdate(capture())
                     assert(firstValue == currencyEntity)
                 }
             }

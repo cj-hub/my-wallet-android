@@ -21,5 +21,5 @@ interface CurrencyDaoImpl : CurrencyDao {
     fun getAll(): Single<List<CurrencyEntity>>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(currency: CurrencyEntity)
+    fun insertOrUpdate(currency: CurrencyEntity)
 }

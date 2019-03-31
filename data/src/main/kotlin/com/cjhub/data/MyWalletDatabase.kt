@@ -1,5 +1,6 @@
 package com.cjhub.data
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
@@ -13,6 +14,8 @@ import com.cjhub.data.entities.AccountEntity
 import com.cjhub.data.entities.CategoryEntity
 import com.cjhub.data.entities.CurrencyEntity
 import com.cjhub.data.entities.TransactionEntity
+
+import java.util.concurrent.Executors
 
 /**
  * Room implementation of My Wallet database.
@@ -43,22 +46,32 @@ internal abstract class MyWalletDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): MyWalletDatabase {
             return Room.databaseBuilder(context, MyWalletDatabase::class.java, "my_wallet_db")
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+
+                            Executors.newSingleThreadExecutor().execute {
+                                // Pre-populate with initial data.
+
+                            }
+                        }
+                    })
                     .build()
         }
 
-        fun createCurrencyDao(context: Context): CurrencyDaoImpl {
+        fun getCurrencyDao(context: Context): CurrencyDaoImpl {
             return getInstance(context).currencyDao()
         }
 
-        fun createTransactionDao(context: Context): TransactionDaoImpl {
+        fun getTransactionDao(context: Context): TransactionDaoImpl {
             return getInstance(context).transactionDao()
         }
 
-        fun createCategoryDao(context: Context): CategoryDaoImpl {
+        fun getCategoryDao(context: Context): CategoryDaoImpl {
             return getInstance(context).categoryDao()
         }
 
-        fun createAccountDao(context: Context): AccountDaoImpl {
+        fun getAccountDao(context: Context): AccountDaoImpl {
             return getInstance(context).accountDao()
         }
     }

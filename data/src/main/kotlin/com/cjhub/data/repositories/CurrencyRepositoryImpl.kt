@@ -23,6 +23,6 @@ class CurrencyRepositoryImpl(
     }
 
     override fun update(currency: Currency): Completable {
-        return Completable.fromAction { currencyDao.update(currencyMapper.toEntity(currency)) }
+        return Completable.fromAction { currencyDao.insertOrUpdate(currencyMapper.toEntity(currency)) }
     }
 }
