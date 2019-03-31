@@ -8,10 +8,10 @@ import android.arch.persistence.room.Embedded
 data class DetailedTransactionEntity(
     @Embedded
     val transaction: TransactionEntity,
-    @Embedded
+    @Embedded(prefix = "category_")
     val category: CategoryEntity,
-    @Embedded
+    @Embedded(prefix = "source_account_")
     val sourceAccount: AccountEntity,
-    @Embedded
+    @Embedded(prefix = "destination_account_")
     val destinationAccount: AccountEntity?
 )

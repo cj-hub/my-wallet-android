@@ -9,6 +9,7 @@ buildscript {
         junit_version = '4.12'
         spek_version = '2.0.1'
         mockitokotlin_version = '2.1.0'
+        supportlibrary_version = '28.0.0'
         libs = [
                 rxjava          : ('io.reactivex.rxjava2:rxjava:' + rxjava_version),
                 rxandroid       : ('io.reactivex.rxjava2:rxandroid:' + rxandroid_version),
@@ -32,15 +33,15 @@ buildscript {
 
 allprojects {
     ext {
-        mainSrcDir = "src/main/kotlin"
-        testSrcDir = "src/test/kotlin"
+        mainSrcDir = 'src/main/kotlin'
+        testSrcDir = 'src/test/kotlin'
 
         androidCompileSdkVersion = 28
         androidMinSdkVersion = 26
         androidTargetSdkVersion = 28
         androidVersionCode = 1
         androidVersionName = '1.0'
-        testInstrumentationRunner = 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
     }
     repositories {
         google()

@@ -20,4 +20,11 @@ data class CurrencyEntity(
     val isActive: Boolean,
     @ColumnInfo(name = "timestamp")
     val timestamp: Long
-)
+) {
+    companion object {
+        val DOLLAR = CurrencyEntity(1L, "USD", "$", true, System.currentTimeMillis())
+        val EURO = CurrencyEntity(2L, "EUR", "€", false, System.currentTimeMillis())
+        val POUND = CurrencyEntity(3L, "GBP", "£", false, System.currentTimeMillis())
+        val BAHT = CurrencyEntity(4L, "THB", "฿", false, System.currentTimeMillis())
+    }
+}

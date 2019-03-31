@@ -9,7 +9,6 @@ data class Account(
     val balance: Float = 0.0f
 ) {
     companion object {
-        val MY_WALLET = Account(1L, "My Wallet", 0.0f)
         val NO_ACCOUNT = Account()
     }
 
