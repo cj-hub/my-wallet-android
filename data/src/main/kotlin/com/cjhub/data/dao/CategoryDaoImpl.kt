@@ -18,10 +18,10 @@ import com.cjhub.data.entities.CategoryEntity
 @Dao
 interface CategoryDaoImpl : CategoryDao {
 
-    @Query("SELECT * FROM categories;")
+    @Query("SELECT * FROM categories ORDER BY name ASC;")
     fun getAll(): Single<List<CategoryEntity>>
 
-    @Query("SELECT * FROM categories WHERE type = :type;")
+    @Query("SELECT * FROM categories WHERE type = :type ORDER BY name ASC;")
     fun getAllByType(type: String): Single<List<CategoryEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

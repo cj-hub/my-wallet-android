@@ -26,7 +26,8 @@ interface TransactionDaoImpl : TransactionDao {
             + "FROM transactions AS t "
             + "JOIN categories AS c ON t.cat_id = c.id "
             + "JOIN accounts AS sa ON t.src_acc_id = sa.id "
-            + "JOIN accounts AS da ON t.dest_acc_id = da.id;"
+            + "JOIN accounts AS da ON t.dest_acc_id = da.id "
+            + "ORDER BY t.date_time DESC;"
     )
     fun getAll(): Single<List<DetailedTransactionEntity>>
 
@@ -39,7 +40,8 @@ interface TransactionDaoImpl : TransactionDao {
             + "JOIN accounts AS sa ON t.src_acc_id = sa.id "
             + "JOIN accounts AS da ON t.dest_acc_id = da.id "
             + "WHERE t.src_acc_id = :accountId "
-            + "OR t.dest_acc_id = :accountId;"
+            + "OR t.dest_acc_id = :accountId "
+            + "ORDER BY t.date_time DESC;"
     )
     fun getAllByAccount(accountId: Long): Single<List<DetailedTransactionEntity>>
 
@@ -51,7 +53,9 @@ interface TransactionDaoImpl : TransactionDao {
             + "JOIN categories AS c ON t.cat_id = c.id "
             + "JOIN accounts AS sa ON t.src_acc_id = sa.id "
             + "JOIN accounts AS da ON t.dest_acc_id = da.id "
-            + "WHERE t.cat_id = :categoryId;")
+            + "WHERE t.cat_id = :categoryId "
+            + "ORDER BY t.date_time DESC;"
+    )
     fun getAllByCategory(categoryId: Long): Single<List<DetailedTransactionEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

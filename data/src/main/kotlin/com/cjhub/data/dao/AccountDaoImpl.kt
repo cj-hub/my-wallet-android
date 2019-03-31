@@ -18,7 +18,7 @@ import com.cjhub.data.entities.AccountEntity
 @Dao
 interface AccountDaoImpl : AccountDao {
 
-    @Query("SELECT * FROM accounts;")
+    @Query("SELECT * FROM accounts ORDER BY name ASC;")
     fun getAll(): Single<List<AccountEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

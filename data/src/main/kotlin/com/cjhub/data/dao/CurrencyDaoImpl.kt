@@ -17,7 +17,7 @@ import com.cjhub.data.entities.CurrencyEntity
 @Dao
 interface CurrencyDaoImpl : CurrencyDao {
 
-    @Query("SELECT * FROM currencies;")
+    @Query("SELECT * FROM currencies ORDER BY name ASC;")
     fun getAll(): Single<List<CurrencyEntity>>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
