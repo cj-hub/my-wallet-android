@@ -20,4 +20,10 @@ data class CategoryEntity(
     val total: Float,
     @ColumnInfo(name = "timestamp")
     val timestamp: Long
-)
+) {
+    companion object {
+        val OTHER_INCOME = CategoryEntity(1L, "Other", "Income", 0.0f, System.currentTimeMillis())
+        val OTHER_EXPENSE = CategoryEntity(2L, "Other", "Expense", 0.0f, System.currentTimeMillis())
+        val TRANSFER = CategoryEntity(3L, "Transfer", "Transfer", 0.0f, System.currentTimeMillis())
+    }
+}

@@ -34,7 +34,8 @@ internal abstract class MyWalletDatabase : RoomDatabase() {
 
     companion object {
 
-        @Volatile private var INSTANCE: MyWalletDatabase? = null
+        @Volatile
+        private var INSTANCE: MyWalletDatabase? = null
 
         private fun getInstance(context: Context): MyWalletDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -51,8 +52,26 @@ internal abstract class MyWalletDatabase : RoomDatabase() {
                             super.onCreate(db)
 
                             Executors.newSingleThreadExecutor().execute {
-                                // Pre-populate with initial data.
-
+                                listOf(
+                                    CurrencyEntity.DOLLAR,
+                                    CurrencyEntity.EURO,
+                                    CurrencyEntity.POUND,
+                                    CurrencyEntity.BAHT
+                                ).forEach { currency ->
+                                    getInstance(context).currencyDao().insertOrUpdate(currency)
+                                }
+                                listOf(
+                                    CategoryEntity.OTHER_INCOME,
+                                    CategoryEntity.OTHER_EXPENSE,
+                                    CategoryEntity.TRANSFER
+                                ).forEach { category ->
+                                    getInstance(context).categoryDao().insertOrUpdate(category)
+                                }
+                                listOf(
+                                    AccountEntity.MY_WALLET
+                                ).forEach { account ->
+                                    getInstance(context).accountDao().insertOfUpdate(account)
+                                }
                             }
                         }
                     })

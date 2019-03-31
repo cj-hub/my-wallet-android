@@ -18,4 +18,8 @@ data class AccountEntity(
     val balance: Float,
     @ColumnInfo(name = "timestamp")
     val timestamp: Long
-)
+) {
+    companion object {
+        val MY_WALLET = AccountEntity(1L, "My Wallet", 0.0f, System.currentTimeMillis())
+    }
+}
