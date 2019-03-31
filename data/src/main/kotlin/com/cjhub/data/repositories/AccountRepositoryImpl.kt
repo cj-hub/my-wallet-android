@@ -18,11 +18,27 @@ class AccountRepositoryImpl(
     private val accountMapper: Mapper<AccountEntity?, Account>
 ) : AccountRepository {
 
-    override fun getAll(): Single<List<Account>> = TODO()
+    override fun getAll(): Single<List<Account>> {
+        return accountDao.getAll().map { accounts -> accounts.map(accountMapper::toModel) }
+    }
 
-    override fun insertOrUpdate(account: Account): Completable = TODO()
+    override fun insertOrUpdate(account: Account): Completable {
+        return Completable.fromAction {
+            accountMapper.toEntity(account)?.let { accountEntity ->
+                accountDao.insertOfUpdate(accountEntity)
+            }
+        }
+    }
 
-    override fun delete(account: Account): Completable = TODO()
+    override fun delete(account: Account): Completable {
+        return Completable.fromAction {
+            accountMapper.toEntity(account)?.let { accountEntity ->
+                accountDao.delete(accountEntity)
+            }
+        }
+    }
 
-    override fun reset(): Completable = TODO()
+    override fun reset(): Completable {
+        return Completable.fromAction { accountDao.reset() }
+    }
 }
