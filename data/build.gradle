@@ -22,6 +22,10 @@ android {
         versionName globalConfiguration['androidVersionName']
         testInstrumentationRunner globalConfiguration['testInstrumentationRunner']
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     testOptions {
         junitPlatform {
             filters {
